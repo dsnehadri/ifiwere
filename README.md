@@ -38,9 +38,10 @@ back down. Six notes per bar, in 3/4.
   which string on each note of the bar.
 - **Four right-hand patterns** — the lesson pattern plus a reverse roll, a sparse practice
   version, and a pinched-downbeat variant.
-- **Editable cues** — hit `✎ Cues` and type your own lyric or memory prompts, one per bar.
-  Each stays on screen until the next one starts. Saved to your browser's local storage
-  only; nothing is uploaded or committed.
+- **Editable cues with built-in alignment** — hit `✎ Cues`, paste the two verses one line
+  per line, and press **Align lines**. The 14 sung lines drop onto the 14 bars where the
+  singing starts. Each holds on screen until the next begins. Saved to your browser's local
+  storage only; nothing is uploaded or committed.
 - **Tempo control** — 40–120% of the original tempo.
 - **Section looping** — loop the intro, either verse, or the outro while you drill it.
 - **Capo 0–7** — shapes stay the same, sounding pitch moves, so you can find your own
@@ -91,9 +92,12 @@ so press **Play** rather than expecting sound on load.
 
 ## Note on lyrics
 
-No lyrics are reproduced here, and none are committed to this repo. The `✎ Cues` feature
-exists so you can type your own prompts into your own browser — they live in local storage
-and go no further.
+No lyrics are reproduced here, and none are committed to this repo.
+
+What *is* committed is the **alignment map** — a 14-entry list of which bars carry a sung
+line, derived from the song's structure. That's timing information, and it's what lets
+`Align lines` place pasted text correctly without the page ever knowing what the text says.
+Paste your own words and they live in your browser's local storage and go no further.
 
 "If I Were" was written and recorded by Vashti Bunyan; chord progressions, voicings and song
 structure are factual musical information, presented for study and practice. Please support

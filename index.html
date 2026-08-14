@@ -304,8 +304,9 @@
 
     <div class="panel note">
       <h3>Your own cues</h3>
-      <p>Hit <b>✎ Cues</b> and every bar gets a text box. Type whatever helps you keep your place &mdash; a lyric line, a word, &ldquo;breathe here&rdquo;, anything. The cue shows in large green text under the chord as that bar comes round, and <b>stays up until the next cue starts</b>, so you only need to type on the bars where a new line begins.</p>
-      <p>These are saved in <b>your browser only</b> &mdash; nothing is uploaded and nothing is committed to the repo. Clearing your browser data clears them. The page ships blank on purpose: the words aren't mine to publish, but they're yours to type.</p>
+      <p>Hit <b>✎ Cues</b>, paste the two verses into the box &mdash; one line per line, blank lines ignored &mdash; and press <b>Align lines</b>. The 14 sung lines land on the 14 bars where the singing starts. Each shows in large green text under the chord and <b>holds until the next one begins</b>.</p>
+      <p>The alignment is built in; the words are not. This page ships with the <b>timing map only</b> &mdash; which bars carry a line, never what the line says. What you paste is saved in <b>your browser's local storage</b>: nothing is uploaded, nothing reaches the repo, and clearing your browser data clears it.</p>
+      <p>If a line lands early or late against the record, switch to <b>Apply numbered</b> and set that bar directly &mdash; every box shows its own bar number.</p>
     </div>
 
     <div class="panel note">
@@ -573,6 +574,17 @@ function cueFor(idx){
   return "";
 }
 
+/* Where the sung lines start.  Each verse is 16 bars and carries 7 lines;
+   most run two bars, but the second line is long and runs four:
+     line 1 -> bars 1-2    line 4 -> bars 9-10
+     line 2 -> bars 3-6    line 5 -> bars 11-12
+     line 3 -> bars 7-8    line 6 -> bars 13-14
+                           line 7 -> bars 15-16
+   That is timing information only.  No lyrics are stored here or shipped
+   with this page -- paste your own and they stay in your browser. */
+const VERSE_LINE_OFFSETS = [0, 2, 6, 8, 10, 12, 14];
+const LINE_BARS = [1, 2].flatMap(si => VERSE_LINE_OFFSETS.map(o => SECTIONS[si].start + o));
+
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 function buildTimeline(){
@@ -594,19 +606,23 @@ function buildTimeline(){
 
   if (editingCues) $("tl").insertAdjacentHTML("afterbegin", `
     <div class="bulk">
-      <p>Paste cues in bulk, one per line, as <b>bar number : text</b> &mdash; e.g. <b>13: your line here</b>.
-      Bars are numbered <b>1&ndash;${TOTAL}</b> straight through the song; each box below shows its own number.
-      A cue holds on screen until the next one starts, so you only need the bars where a new line begins.</p>
-      <textarea id="bulkText" placeholder="13: …&#10;15: …&#10;17: …" spellcheck="false"></textarea>
+      <p><b>Align lines</b> &mdash; paste the ${LINE_BARS.length} sung lines of the two verses, one per line,
+      in order. Blank lines are ignored, so pasting both verses with a gap between them is fine.
+      They drop straight onto the ${LINE_BARS.length} bars where the singing starts.</p>
+      <p><b>Apply numbered</b> &mdash; for full control, use <b>bar number : text</b> per line
+      (e.g. <b>21: …</b>). Bars run <b>1&ndash;${TOTAL}</b> straight through the song and every box
+      below shows its own number. A cue holds on screen until the next one starts.</p>
+      <textarea id="bulkText" placeholder="paste the verse lines here, one per line…" spellcheck="false"></textarea>
       <div class="bulk-row">
-        <button class="btn" id="bulkApply">Apply</button>
+        <button class="btn primary" id="bulkAlign">Align lines</button>
+        <button class="btn" id="bulkApply">Apply numbered</button>
         <button class="btn" id="bulkLoad">Load current</button>
         <button class="btn" id="bulkClear">Clear all</button>
         <span class="bulk-msg" id="bulkMsg"></span>
       </div>
     </div>`);
   $("cueHint").innerHTML = editingCues
-    ? `<span style="color:var(--accent2)">typing cues — each one stays on screen until the next</span>`
+    ? `<span style="color:#0f0">typing cues — each one stays on screen until the next</span>`
     : ``;
 }
 
@@ -764,6 +780,20 @@ function bindTimeline(){
       lastDrawn = -1; paint(cursor, lastStep < 0 ? 0 : lastStep);
       $("bulkMsg").textContent = `${applied} cue${applied === 1 ? "" : "s"} set` +
         (skipped ? ` · ${skipped} line${skipped === 1 ? "" : "s"} skipped (no bar number)` : "");
+    };
+    $("bulkAlign").onclick = () => {
+      const lines = bt.value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      if (!lines.length){ $("bulkMsg").textContent = "nothing to align — paste the lines first"; return; }
+      LINE_BARS.forEach(b => delete cues[b]);
+      const n = Math.min(lines.length, LINE_BARS.length);
+      for (let i = 0; i < n; i++) cues[LINE_BARS[i]] = lines[i];
+      saveCues();
+      buildTimeline(); bindTimeline();
+      lastDrawn = -1; paint(cursor, lastStep < 0 ? 0 : lastStep);
+      const extra = lines.length - n, short = LINE_BARS.length - n;
+      $("bulkMsg").textContent = `${n} line${n === 1 ? "" : "s"} aligned` +
+        (extra ? ` · ${extra} left over (only ${LINE_BARS.length} slots)` : "") +
+        (short ? ` · ${short} slot${short === 1 ? "" : "s"} still empty` : "");
     };
     $("bulkLoad").onclick = () => {
       bt.value = Object.keys(cues).map(Number).sort((a,b) => a - b)
