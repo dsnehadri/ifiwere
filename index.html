@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>If I Were — Guitar Karaoke</title>
+<meta name="description" content="A play-along chord and fingerpicking trainer for &quot;If I Were&quot; by Vashti Bunyan.">
+<style>
+  :root{
+    --bg:#14110e;
+    --bg2:#1d1915;
+    --panel:#241f1a;
+    --panel2:#2c2620;
+    --line:#3a322a;
+    --ink:#f2e9dd;
+    --ink-dim:#b3a493;
+    --ink-faint:#7d7061;
+    --accent:#e8a33d;
+    --accent2:#7fb069;
+    --accent3:#d96f5b;
+    --shadow:0 10px 30px rgba(0,0,0,.45);
+    --r:14px;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:
+      radial-gradient(1100px 620px at 12% -8%, #2e2419 0%, transparent 60%),
+      radial-gradient(900px 500px at 92% 4%, #222b23 0%, transparent 58%),
+      var(--bg);
+    color:var(--ink);
+    font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
+    min-height:100vh;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* ---------- header ---------- */
+  header{padding:44px 0 26px}
+  .eyebrow{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:-.025em;font-weight:700}
+  h1 em{font-style:normal;color:var(--accent)}
+  .byline{color:var(--ink-dim);margin-top:10px;font-size:17px}
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .fact{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--ink-dim)}
+  .fact b{color:var(--ink);font-weight:600}
+
+  /* ---------- generic panel ---------- */
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:16px;font-family:var(--mono)}
+
+  /* ---------- transport ---------- */
+  .transport{position:sticky;top:0;z-index:60;background:rgba(20,17,14,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:26px}
+  .tbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+  .btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;transition:.15s;white-space:nowrap}
+  .btn:hover{background:#39312a;border-color:#4d4238}
+  .btn.primary{background:var(--accent);color:#211703;border-color:var(--accent);min-width:118px;text-align:center}
+  .btn.primary:hover{background:#f2b355}
+  .ctl{display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 13px}
+  .ctl label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;font-family:var(--mono)}
+  .ctl output,.ctl select{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600}
+  select{background:#1a1612;border:1px solid var(--line);border-radius:7px;padding:4px 7px;cursor:pointer}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;background:var(--line);border-radius:3px;width:104px;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+  .beat-dots{display:flex;gap:6px;margin-left:auto;align-items:center}
+  .dot{width:11px;height:11px;border-radius:50%;background:#3a322a;transition:.06s}
+  .dot.on{background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .dot.on.down{background:var(--accent3);box-shadow:0 0 14px var(--accent3)}
+
+  /* ---------- stage ---------- */
+  .stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;margin-bottom:18px}
+  @media(max-width:900px){.stage{grid-template-columns:1fr}}
+
+  .now{padding:22px;display:flex;gap:24px;align-items:center;min-height:262px}
+  .now-main{flex:1;min-width:0}
+  .now-label{font:700 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px}
+  .now-chord{font-size:clamp(52px,11vw,84px);font-weight:700;letter-spacing:-.03em;line-height:1}
+  .now-sec{color:var(--ink-faint);font-size:13px;margin-top:8px;font-family:var(--mono)}
+  .next-row{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:26px}
+  .next-item .k{font:700 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px}
+  .next-item .v{font-size:24px;font-weight:700;color:var(--ink-dim)}
+
+  /* ---------- picking ---------- */
+  .pick{padding:22px}
+  .pattern-grid{display:grid;grid-template-columns:26px repeat(4,1fr);gap:5px;margin-top:4px}
+  .pg-cell{height:38px;border-radius:7px;background:#1c1815;border:1px solid #302921;display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);color:var(--ink-faint);transition:.1s}
+  .pg-str{background:none;border:none;color:var(--ink-faint);font-size:11px;justify-content:flex-end;padding-right:6px}
+  .pg-cell.hit{background:#33291c;border-color:#5c4a2c;color:var(--accent)}
+  .pg-cell.hit.bass{background:#3a2620;border-color:#6b4137;color:var(--accent3)}
+  .pg-cell.active{transform:scale(1.07);box-shadow:0 0 0 2px var(--accent)}
+  .pg-head{height:20px;font:700 10px var(--mono);letter-spacing:.12em;color:var(--ink-faint);background:none;border:none}
+  .pima-note{margin-top:14px;font-size:13px;color:var(--ink-dim);line-height:1.6}
+  .pima-note b{color:var(--ink)}
+
+  /* ---------- timeline ---------- */
+  .timeline{padding:20px 22px 22px;margin-bottom:18px}
+  .tl-scroll{max-height:330px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#4a4038 transparent;padding-right:6px}
+  .tl-scroll::-webkit-scrollbar{width:8px}
+  .tl-scroll::-webkit-scrollbar-thumb{background:#4a4038;border-radius:4px}
+  .tl-sec{margin-bottom:18px}
+  .tl-sec:last-child{margin-bottom:0}
+  .tl-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  .tl-name{font:700 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+  .tl-bars{font:11px var(--mono);color:var(--ink-faint)}
+  .tl-loop{font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--ink-faint);transition:.15s}
+  .tl-loop:hover{border-color:var(--accent);color:var(--accent)}
+  .tl-loop.on{background:var(--accent);color:#211703;border-color:var(--accent)}
+  .tl-chords{display:flex;flex-wrap:wrap;gap:5px}
+  .chip{min-width:52px;text-align:center;padding:8px 10px;border-radius:8px;background:#1c1815;border:1px solid #302921;font:700 14px var(--mono);color:var(--ink-dim);cursor:pointer;transition:.12s}
+  .chip:hover{border-color:#5a4c3c;color:var(--ink)}
+  .chip.bar-start{border-left:2px solid #4a4038}
+  .chip.done{color:var(--ink-faint);opacity:.55}
+  .chip.cur{background:var(--accent);color:#211703;border-color:var(--accent);box-shadow:0 0 18px rgba(232,163,61,.4);opacity:1}
+
+  /* ---------- chord library ---------- */
+  .lib{padding:22px;margin-bottom:18px}
+  .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(126px,1fr));gap:12px}
+  .cc{background:#1c1815;border:1px solid #302921;border-radius:10px;padding:12px 8px 10px;text-align:center;transition:.15s}
+  .cc.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .cc-name{font:700 16px var(--mono);margin-bottom:2px}
+  .cc-sub{font:10px var(--mono);color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;min-height:12px}
+
+  /* ---------- notes ---------- */
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  .note{padding:22px}
+  .note h3{font-size:15px;margin-bottom:10px;color:var(--ink)}
+  .note p{color:var(--ink-dim);font-size:14px;margin-bottom:10px}
+  .note p:last-child{margin-bottom:0}
+  .note ul{color:var(--ink-dim);font-size:14px;padding-left:18px}
+  .note li{margin-bottom:7px}
+  .note b,.note strong{color:var(--ink);font-weight:600}
+  code{font-family:var(--mono);font-size:.9em;background:#1a1612;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--accent)}
+  .warn{border-left:3px solid var(--accent3)}
+  footer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:13px;line-height:1.7}
+  footer a{color:var(--ink-dim)}
+  kbd{font-family:var(--mono);font-size:11px;background:#1a1612;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-dim)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Guitar Karaoke</div>
+    <h1>If <em>I</em> Were</h1>
+    <div class="byline">Vashti Bunyan &middot; <i>Lookaftering</i> (2005)</div>
+    <div class="facts">
+      <span class="fact"><b>Key</b> C major / D minor feel</span>
+      <span class="fact"><b>Tempo</b> 97 BPM</span>
+      <span class="fact"><b>Time</b> 4/4</span>
+      <span class="fact"><b>Tuning</b> Standard EADGBE</span>
+      <span class="fact"><b>Chords</b> Dm C Em F G Am</span>
+      <span class="fact"><b>Length</b> 2:15</span>
+    </div>
+  </header>
+</div>
+
+<div class="transport">
+  <div class="wrap tbar">
+    <button class="btn primary" id="play">▶ Play</button>
+    <button class="btn" id="restart">↺ Restart</button>
+    <div class="ctl">
+      <label for="tempo">Tempo</label>
+      <input type="range" id="tempo" min="40" max="120" step="1" value="100">
+      <output id="tempoOut">97 BPM</output>
+    </div>
+    <div class="ctl">
+      <label for="capo">Capo</label>
+      <select id="capo"></select>
+    </div>
+    <div class="ctl">
+      <label for="feel">Chord =</label>
+      <select id="feel">
+        <option value="2" selected>2 beats</option>
+        <option value="4">4 beats</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="sound">Sound</label>
+      <select id="sound">
+        <option value="both" selected>Guitar + click</option>
+        <option value="guitar">Guitar only</option>
+        <option value="click">Click only</option>
+        <option value="off">Silent</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="pattern">Pattern</label>
+      <select id="pattern"></select>
+    </div>
+    <div class="beat-dots" id="dots"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="stage">
+    <div class="panel now">
+      <div class="now-main">
+        <div class="now-label" id="nowLabel">Ready</div>
+        <div class="now-chord" id="nowChord">Dm</div>
+        <div class="now-sec" id="nowSec">Press play, or tap any chord below to start there</div>
+        <div class="next-row">
+          <div class="next-item"><div class="k">Next</div><div class="v" id="nextChord">C</div></div>
+          <div class="next-item"><div class="k">Then</div><div class="v" id="thenChord">Dm</div></div>
+          <div class="next-item"><div class="k">Bar</div><div class="v" id="barNum">1</div></div>
+        </div>
+      </div>
+      <div id="nowDiagram"></div>
+    </div>
+
+    <div class="panel pick">
+      <h2>Right hand &middot; <span id="patName">Simple arpeggio</span></h2>
+      <div class="pattern-grid" id="patGrid"></div>
+      <div class="pima-note" id="patDesc"></div>
+    </div>
+  </div>
+
+  <div class="panel timeline">
+    <h2>Chord chart</h2>
+    <div class="tl-scroll" id="tl"></div>
+  </div>
+
+  <div class="panel lib">
+    <h2>Chord shapes</h2>
+    <div class="lib-grid" id="lib"></div>
+  </div>
+
+  <div class="cols">
+    <div class="panel note">
+      <h3>How to practise this</h3>
+      <ul>
+        <li>Start at <b>60&ndash;70%</b> tempo. The whole song lives on six open chords; the difficulty is in keeping the right hand even, not in the shapes.</li>
+        <li>Loop one section at a time with the <b>loop</b> button on each section header.</li>
+        <li>The bass note matters more than anything: <code>Dm</code>&rarr;D string, <code>C</code> and <code>Am</code>&rarr;A string, <code>Em</code>, <code>F</code>, <code>G</code>&rarr;low E.</li>
+        <li>Let notes ring into each other. Don't damp between chords &mdash; the overlap is the sound.</li>
+        <li>Play it quieter than feels natural. Bunyan's records are close-miked and very soft; a hard attack kills the character.</li>
+      </ul>
+    </div>
+
+    <div class="panel note">
+      <h3>Making <code>F</code> easy</h3>
+      <p>The barre <code>F</code> is the only hard shape here, and you almost certainly don't need it. Use <b>Fmaj7</b> <code>xx3210</code> instead &mdash; it keeps the open B and high E ringing, which suits the fingerpicking far better than a barre.</p>
+      <p>Switch the library above to see both shapes. If you want more bottom end, <code>Fadd9</code> <code>xx3213</code> also works.</p>
+    </div>
+
+    <div class="panel note">
+      <h3>Capo &amp; singing it</h3>
+      <p>The shapes never change when you use a capo &mdash; everything just moves up. The capo control raises the pitch so you can find a comfortable place for your own voice.</p>
+      <p>Bunyan sings very high and light. If you're singing lower, try <b>capo 0</b> and drop the octave rather than fighting for her register.</p>
+    </div>
+
+    <div class="panel note warn">
+      <h3>Accuracy &mdash; please read</h3>
+      <p>The <b>chord progression</b> comes from a published transcription and is corroborated by the song's key: every chord is diatonic to C major, which is consistent across sources.</p>
+      <p>The <b>fingerpicking patterns</b> are idiomatic suggestions I built to fit the harmony &mdash; they are not a verified transcription of the record. No source I found notates the right hand.</p>
+      <p>The <b>timing</b> assumes two beats per chord. Play along with the recording and switch to <code>4 beats</code> if a section drifts.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p><b>Keyboard:</b> <kbd>Space</kbd> play/pause &middot; <kbd>R</kbd> restart &middot; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> step a chord &middot; <kbd>&darr;</kbd> <kbd>&uarr;</kbd> tempo</p>
+    <p>Chords and structure are factual musical information presented for study and practice. No lyrics are reproduced here. &ldquo;If I Were&rdquo; was written and recorded by Vashti Bunyan; please support the artist by buying <i>Lookaftering</i>.</p>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   Chord shapes.  Strings indexed 0..5 = low E, A, D, G, B, high E
+   fret -1 = muted, 0 = open
+   ============================================================ */
+const OPEN_MIDI = [40, 45, 50, 55, 59, 64];
+
+const SHAPES = {
+  Dm:     { frets:[-1,-1, 0, 2, 3, 1], fingers:[0,0,0,2,3,1], bass:2, sub:"" },
+  C:      { frets:[-1, 3, 2, 0, 1, 0], fingers:[0,3,2,0,1,0], bass:1, sub:"" },
+  Em:     { frets:[ 0, 2, 2, 0, 0, 0], fingers:[0,2,3,0,0,0], bass:0, sub:"" },
+  Am:     { frets:[-1, 0, 2, 2, 1, 0], fingers:[0,0,2,3,1,0], bass:1, sub:"" },
+  G:      { frets:[ 3, 2, 0, 0, 0, 3], fingers:[2,1,0,0,0,3], bass:0, sub:"" },
+  F:      { frets:[ 1, 3, 3, 2, 1, 1], fingers:[1,3,4,2,1,1], bass:0, barre:{fret:1,from:0,to:5}, sub:"barre" },
+  Fmaj7:  { frets:[-1,-1, 3, 2, 1, 0], fingers:[0,0,3,2,1,0], bass:2, sub:"easy F" }
+};
+
+/* which shape actually gets played for the chord symbol "F" */
+let fVoicing = "Fmaj7";
+const resolve = name => (name === "F" ? fVoicing : name);
+
+/* ============================================================
+   Arrangement.  Source transcription lists chords in order;
+   default reading is two beats (half a bar) per chord.
+   ============================================================ */
+const SECTIONS = [
+  { name:"Intro",   chords:"Dm C Dm C Dm Em Dm Em F G F G Dm Em Dm Em F G F C" },
+  { name:"Verse 1", chords:"Dm Am Dm C F G F G Dm Am Dm C F G Am C" },
+  { name:"Verse 2", chords:"Dm Am Dm C F G F G Dm Am Dm C F G Am C" },
+  { name:"Outro",   chords:"Dm Em Dm C F G F G Dm Em Dm C F G Am G Dm Em Dm C F G F G" }
+].map(s => ({ name:s.name, chords:s.chords.trim().split(/\s+/) }));
+
+/* flatten into a single event list */
+const EVENTS = [];
+SECTIONS.forEach((s, si) => {
+  s.start = EVENTS.length;
+  s.chords.forEach(c => EVENTS.push({ chord:c, section:s.name, sectionIdx:si }));
+  s.end = EVENTS.length;
+});
+const TOTAL = EVENTS.length;
+
+/* ============================================================
+   Right-hand patterns.  4 steps per chord.
+   "b" = thumb on the chord's bass string,
+   digits = string index plucked, null = rest
+   ============================================================ */
+const PATTERNS = [
+  { id:"arp",   name:"Simple arpeggio",
+    steps:[{s:"b",f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"}],
+    desc:"<b>p&ndash;i&ndash;m&ndash;a</b>, one note per eighth note, four notes per chord. Thumb takes the bass, then the three fingers climb G&ndash;B&ndash;E. This is the pattern to learn first &mdash; it fits every chord in the song without changing." },
+  { id:"roll",  name:"Roll &amp; return",
+    steps:[{s:"b",f:"p"},{s:3,f:"i"},{s:5,f:"a"},{s:4,f:"m"},],
+    desc:"<b>p&ndash;i&ndash;a&ndash;m</b>. The same climb but the top two notes swap, so the melody note lands on the offbeat. Slightly more restless &mdash; good under the verses." },
+  { id:"pinch", name:"Pinch &amp; fill",
+    steps:[{s:"b",f:"p",pinch:5},{s:3,f:"i"},{s:4,f:"m"},{s:3,f:"i"}],
+    desc:"Thumb and <b>a</b> finger strike <b>together</b> on beat one (a pinch), then <b>i&ndash;m&ndash;i</b> fills underneath. Gives each chord change a clear accent. Use it on the intro." },
+  { id:"slow",  name:"Sparse (half time)",
+    steps:[{s:"b",f:"p"},null,{s:4,f:"m",pinch:5},null],
+    desc:"Bass on the beat, then the top two strings together on the offbeat. Almost nothing happening &mdash; which is the point. Try this if the busier patterns are drowning your voice." }
+];
+let pattern = PATTERNS[0];
+
+/* ============================================================
+   State
+   ============================================================ */
+const BASE_BPM = 97;
+let bpm = BASE_BPM;
+let beatsPerChord = 2;
+let capo = 0;
+let soundMode = "both";
+let playing = false;
+let cursor = 0;              // index into EVENTS
+let loopSection = null;      // section index or null
+
+let ctx = null, master = null;
+let nextStepTime = 0;        // audio-clock time of the next step
+let stepIndex = 0;           // 0..3 within the current chord
+let schedTimer = null;
+const drawQueue = [];
+
+const stepDur = () => (60 / bpm) * (beatsPerChord / 4);
+
+/* ============================================================
+   Audio
+   ============================================================ */
+function initAudio(){
+  if (ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  master = ctx.createGain();
+  master.gain.value = 0.85;
+  master.connect(ctx.destination);
+}
+
+function pluck(midi, when, vel){
+  if (soundMode === "off" || soundMode === "click") return;
+  const f = 440 * Math.pow(2, (midi - 69) / 12);
+  const out = ctx.createGain();
+  out.gain.value = 0;
+  out.connect(master);
+
+  // additive plucked tone: harmonics decay faster than the fundamental
+  const parts = [[1, 1.0, 2.6], [2, 0.42, 1.5], [3, 0.20, 0.9], [4, 0.10, 0.6], [5, 0.05, 0.4]];
+  parts.forEach(([mult, amp, decay]) => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "triangle";
+    o.frequency.value = f * mult;
+    g.gain.setValueAtTime(0, when);
+    g.gain.linearRampToValueAtTime(amp * vel, when + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + decay);
+    o.connect(g); g.connect(out);
+    o.start(when);
+    o.stop(when + decay + 0.05);
+  });
+  out.gain.setValueAtTime(0.16, when);
+}
+
+function click(when, accent){
+  if (soundMode === "off" || soundMode === "guitar") return;
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = "square";
+  o.frequency.value = accent ? 1500 : 950;
+  g.gain.setValueAtTime(0.10, when);
+  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.035);
+  o.connect(g); g.connect(master);
+  o.start(when); o.stop(when + 0.05);
+}
+
+/* note sounded by a string of the current chord, including capo */
+function stringMidi(shape, str){
+  const fr = shape.frets[str];
+  if (fr < 0) return null;
+  return OPEN_MIDI[str] + fr + capo;
+}
+
+/* pick the actual string for a step, falling back if it's muted */
+function stepStrings(shape, step){
+  if (!step) return [];
+  const out = [];
+  const primary = step.s === "b" ? shape.bass : step.s;
+  if (shape.frets[primary] >= 0) out.push(primary);
+  else {
+    // find nearest sounding string
+    for (let d = 1; d < 6; d++){
+      if (shape.frets[primary + d] >= 0) { out.push(primary + d); break; }
+      if (shape.frets[primary - d] >= 0) { out.push(primary - d); break; }
+    }
+  }
+  if (step.pinch != null && shape.frets[step.pinch] >= 0) out.push(step.pinch);
+  return out;
+}
+
+/* ============================================================
+   Scheduler
+   ============================================================ */
+function scheduleStep(idx, step, when){
+  const ev = EVENTS[idx];
+  const shape = SHAPES[resolve(ev.chord)];
+  const st = pattern.steps[step];
+
+  // metronome on every beat boundary
+  const stepsPerBeat = 4 / beatsPerChord;
+  if (stepsPerBeat >= 1 ? step % stepsPerBeat === 0 : step === 0){
+    click(when, step === 0);
+  }
+
+  stepStrings(shape, st).forEach((s, i) => {
+    const m = stringMidi(shape, s);
+    if (m != null) pluck(m, when + i * 0.006, st.s === "b" && i === 0 ? 1.0 : 0.72);
+  });
+
+  drawQueue.push({ idx, step, when });
+}
+
+function advance(){
+  stepIndex++;
+  if (stepIndex >= 4){
+    stepIndex = 0;
+    cursor++;
+    if (loopSection != null){
+      const s = SECTIONS[loopSection];
+      if (cursor >= s.end) cursor = s.start;
+    } else if (cursor >= TOTAL){
+      cursor = 0;
+    }
+  }
+  nextStepTime += stepDur();
+}
+
+function scheduler(){
+  const AHEAD = 0.12;
+  while (nextStepTime < ctx.currentTime + AHEAD){
+    scheduleStep(cursor, stepIndex, nextStepTime);
+    advance();
+  }
+}
+
+function start(){
+  initAudio();
+  if (ctx.state === "suspended") ctx.resume();
+  playing = true;
+  stepIndex = 0;
+  nextStepTime = ctx.currentTime + 0.08;
+  schedTimer = setInterval(scheduler, 25);
+  document.getElementById("play").textContent = "❚❚ Pause";
+  document.getElementById("nowLabel").textContent = "Now playing";
+}
+
+function stop(){
+  playing = false;
+  clearInterval(schedTimer);
+  schedTimer = null;
+  drawQueue.length = 0;
+  document.getElementById("play").textContent = "▶ Play";
+  document.getElementById("nowLabel").textContent = "Paused";
+  document.querySelectorAll(".dot").forEach(d => d.classList.remove("on","down"));
+  document.querySelectorAll(".pg-cell.active").forEach(c => c.classList.remove("active"));
+}
+
+function toggle(){ playing ? stop() : start(); }
+
+/* ============================================================
+   Chord diagram rendering
+   ============================================================ */
+function diagram(name, size){
+  const shape = SHAPES[name];
+  if (!shape) return "";
+  const W = size, H = size * 1.18;
+  const padX = W * 0.16, padTop = H * 0.20, padBot = H * 0.08;
+  const gw = W - padX * 2, gh = H - padTop - padBot;
+  const NF = 4;
+  const sx = gw / 5, fy = gh / NF;
+
+  // position: lowest fretted fret (for shapes above the nut)
+  const fretted = shape.frets.filter(f => f > 0);
+  const minF = fretted.length ? Math.min(...fretted) : 1;
+  const maxF = fretted.length ? Math.max(...fretted) : 1;
+  const base = maxF <= NF ? 1 : minF;
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${name} chord diagram">`;
+
+  // nut or position marker
+  if (base === 1){
+    s += `<rect x="${padX - 1}" y="${padTop - 3}" width="${gw + 2}" height="4" fill="#b3a493" rx="1"/>`;
+  } else {
+    s += `<text x="${padX - 8}" y="${padTop + fy * 0.62}" font-size="${W * 0.11}" fill="#7d7061" text-anchor="end" font-family="monospace">${base}</text>`;
+  }
+  // frets
+  for (let f = 1; f <= NF; f++)
+    s += `<line x1="${padX}" y1="${padTop + f * fy}" x2="${padX + gw}" y2="${padTop + f * fy}" stroke="#4a4038" stroke-width="1"/>`;
+  // strings
+  for (let i = 0; i < 6; i++)
+    s += `<line x1="${padX + i * sx}" y1="${padTop}" x2="${padX + i * sx}" y2="${padTop + gh}" stroke="#5a4c3c" stroke-width="1"/>`;
+
+  // barre
+  if (shape.barre && base === 1){
+    const b = shape.barre;
+    s += `<rect x="${padX + b.from * sx - sx * 0.28}" y="${padTop + (b.fret - base) * fy + fy * 0.22}" width="${(b.to - b.from) * sx + sx * 0.56}" height="${fy * 0.56}" rx="${fy * 0.28}" fill="#e8a33d"/>`;
+  }
+
+  // dots / open / muted
+  shape.frets.forEach((fr, i) => {
+    const x = padX + i * sx;
+    if (fr < 0){
+      const r = W * 0.030;
+      s += `<g stroke="#7d7061" stroke-width="1.6" stroke-linecap="round">
+              <line x1="${x - r}" y1="${padTop - r - 7}" x2="${x + r}" y2="${padTop + r - 7}"/>
+              <line x1="${x + r}" y1="${padTop - r - 7}" x2="${x - r}" y2="${padTop + r - 7}"/>
+            </g>`;
+    } else if (fr === 0){
+      s += `<circle cx="${x}" cy="${padTop - 7}" r="${W * 0.032}" fill="none" stroke="#7fb069" stroke-width="1.6"/>`;
+    } else {
+      const isBarreNote = shape.barre && fr === shape.barre.fret && base === 1;
+      if (isBarreNote) return;
+      const cy = padTop + (fr - base) * fy + fy / 2;
+      s += `<circle cx="${x}" cy="${cy}" r="${sx * 0.34}" fill="#e8a33d"/>`;
+      const fg = shape.fingers[i];
+      if (fg) s += `<text x="${x}" y="${cy + W * 0.038}" font-size="${W * 0.105}" fill="#211703" text-anchor="middle" font-weight="700" font-family="monospace">${fg}</text>`;
+    }
+  });
+
+  s += `</svg>`;
+  return s;
+}
+
+/* ============================================================
+   UI build
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+// beat dots
+function buildDots(){
+  $("dots").innerHTML = Array.from({length:4}, (_,i) => `<span class="dot" data-i="${i}"></span>`).join("");
+}
+buildDots();
+
+// capo options
+$("capo").innerHTML = Array.from({length:8}, (_,i) =>
+  `<option value="${i}">${i === 0 ? "None" : i}</option>`).join("");
+
+// pattern options
+$("pattern").innerHTML = PATTERNS.map((p,i) => `<option value="${i}">${p.name}</option>`).join("");
+
+// timeline
+function buildTimeline(){
+  $("tl").innerHTML = SECTIONS.map((s, si) => {
+    const bars = (s.chords.length * beatsPerChord / 4);
+    const chips = s.chords.map((c, i) => {
+      const gi = s.start + i;
+      const barStart = (i * beatsPerChord) % 4 === 0;
+      return `<button class="chip${barStart ? " bar-start" : ""}" data-i="${gi}">${c}</button>`;
+    }).join("");
+    return `<div class="tl-sec">
+      <div class="tl-head">
+        <span class="tl-name">${s.name}</span>
+        <span class="tl-bars">${s.chords.length} chords &middot; ${bars % 1 ? bars.toFixed(1) : bars} bars</span>
+        <button class="tl-loop" data-loop="${si}">Loop</button>
+      </div>
+      <div class="tl-chords">${chips}</div>
+    </div>`;
+  }).join("");
+}
+buildTimeline();
+
+// chord library
+function buildLib(){
+  const order = ["Dm","C","Em","F","Fmaj7","G","Am"];
+  $("lib").innerHTML = order.map(n => `
+    <div class="cc" data-chord="${n}">
+      <div class="cc-name">${n}</div>
+      <div class="cc-sub">${SHAPES[n].sub || "&nbsp;"}</div>
+      ${diagram(n, 104)}
+    </div>`).join("");
+}
+buildLib();
+
+// pattern grid
+function buildPatGrid(){
+  const labels = ["e","B","G","D","A","E"];           // display top-down high→low
+  const rows = [5,4,3,2,1,0];
+  let html = `<div class="pg-cell pg-head"></div>` +
+             [1,2,3,4].map(i => `<div class="pg-cell pg-head" style="justify-content:center">${i}</div>`).join("");
+  rows.forEach((str, ri) => {
+    html += `<div class="pg-cell pg-str">${labels[ri]}</div>`;
+    for (let s = 0; s < 4; s++){
+      const st = pattern.steps[s];
+      let cls = "pg-cell", txt = "";
+      if (st){
+        const isBass = st.s === "b";
+        // we can't know the true bass string until a chord is active; mark generically
+        const targets = [];
+        if (!isBass) targets.push(st.s);
+        if (st.pinch != null) targets.push(st.pinch);
+        if (targets.includes(str)) { cls += " hit"; txt = st.pinch === str ? "a" : st.f; }
+      }
+      html += `<div class="${cls}" data-step="${s}" data-str="${str}">${txt}</div>`;
+    }
+  });
+  $("patGrid").innerHTML = html;
+  $("patName").innerHTML = pattern.name;
+  $("patDesc").innerHTML = pattern.desc;
+}
+buildPatGrid();
+
+/* mark the bass cell for the active chord */
+function markBass(chordName){
+  const shape = SHAPES[resolve(chordName)];
+  document.querySelectorAll('.pg-cell[data-step]').forEach(c => {
+    if (c.dataset.bass === "1"){ c.classList.remove("hit","bass"); c.textContent = ""; delete c.dataset.bass; }
+  });
+  pattern.steps.forEach((st, si) => {
+    if (!st || st.s !== "b") return;
+    const cell = document.querySelector(`.pg-cell[data-step="${si}"][data-str="${shape.bass}"]`);
+    if (cell && !cell.classList.contains("hit")){
+      cell.classList.add("hit","bass");
+      cell.textContent = "p";
+      cell.dataset.bass = "1";
+    }
+  });
+}
+
+/* ============================================================
+   Display update
+   ============================================================ */
+let lastDrawn = -1, lastStep = -1, lastChordShown = null;
+
+function paint(idx, step){
+  const ev = EVENTS[idx];
+  const shape = resolve(ev.chord);
+
+  if (idx !== lastDrawn){
+    $("nowChord").textContent = ev.chord;
+    const nx = EVENTS[(idx + 1) % TOTAL], th = EVENTS[(idx + 2) % TOTAL];
+    $("nextChord").textContent = nx.chord;
+    $("thenChord").textContent = th.chord;
+
+    const sec = SECTIONS[ev.sectionIdx];
+    const posInSec = idx - sec.start;
+    const bar = Math.floor(posInSec * beatsPerChord / 4) + 1;
+    $("barNum").textContent = bar;
+    $("nowSec").textContent = `${sec.name} · bar ${bar} · chord ${posInSec + 1} of ${sec.chords.length}`;
+
+    if (shape !== lastChordShown){
+      $("nowDiagram").innerHTML = diagram(shape, 150);
+      lastChordShown = shape;
+      document.querySelectorAll(".cc").forEach(c =>
+        c.classList.toggle("cur", c.dataset.chord === shape));
+    }
+    markBass(ev.chord);
+
+    // chips
+    document.querySelectorAll(".chip").forEach(c => {
+      const i = +c.dataset.i;
+      c.classList.toggle("cur", i === idx);
+      c.classList.toggle("done", i < idx);
+    });
+    const cur = document.querySelector(".chip.cur");
+    if (cur){
+      const box = $("tl");
+      const top = cur.offsetTop - box.offsetTop;
+      if (top < box.scrollTop || top > box.scrollTop + box.clientHeight - 60)
+        box.scrollTo({ top: top - box.clientHeight / 2, behavior: "smooth" });
+    }
+    lastDrawn = idx;
+  }
+
+  if (step !== lastStep){
+    document.querySelectorAll(".pg-cell.active").forEach(c => c.classList.remove("active"));
+    document.querySelectorAll(`.pg-cell[data-step="${step}"].hit`).forEach(c => c.classList.add("active"));
+    const stepsPerBeat = 4 / beatsPerChord;
+    document.querySelectorAll(".dot").forEach((d, i) => {
+      d.classList.toggle("on", i === step);
+      d.classList.toggle("down", i === step && step === 0);
+    });
+    lastStep = step;
+  }
+}
+
+function frame(){
+  if (playing && ctx){
+    const now = ctx.currentTime;
+    let ev = null;
+    while (drawQueue.length && drawQueue[0].when <= now) ev = drawQueue.shift();
+    if (ev) paint(ev.idx, ev.step);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ============================================================
+   Events
+   ============================================================ */
+$("play").onclick = toggle;
+$("restart").onclick = () => {
+  cursor = loopSection != null ? SECTIONS[loopSection].start : 0;
+  stepIndex = 0;
+  lastDrawn = -1;
+  if (playing){ drawQueue.length = 0; nextStepTime = ctx.currentTime + 0.05; }
+  paint(cursor, 0);
+};
+
+$("tempo").oninput = e => {
+  bpm = Math.round(BASE_BPM * e.target.value / 100);
+  $("tempoOut").textContent = `${bpm} BPM · ${e.target.value}%`;
+};
+
+$("capo").onchange = e => { capo = +e.target.value; };
+
+$("feel").onchange = e => {
+  beatsPerChord = +e.target.value;
+  buildTimeline(); bindTimeline(); lastDrawn = -1; paint(cursor, 0);
+};
+
+$("sound").onchange = e => { soundMode = e.target.value; };
+
+$("pattern").onchange = e => {
+  pattern = PATTERNS[+e.target.value];
+  buildPatGrid();
+  markBass(EVENTS[cursor].chord);
+};
+
+function bindTimeline(){
+  document.querySelectorAll(".chip").forEach(c => {
+    c.onclick = () => {
+      cursor = +c.dataset.i;
+      stepIndex = 0; lastDrawn = -1;
+      if (playing){ drawQueue.length = 0; nextStepTime = ctx.currentTime + 0.05; }
+      else paint(cursor, 0);
+    };
+  });
+  document.querySelectorAll(".tl-loop").forEach(b => {
+    b.onclick = () => {
+      const si = +b.dataset.loop;
+      loopSection = loopSection === si ? null : si;
+      document.querySelectorAll(".tl-loop").forEach(x =>
+        x.classList.toggle("on", +x.dataset.loop === loopSection));
+      if (loopSection != null && (cursor < SECTIONS[si].start || cursor >= SECTIONS[si].end)){
+        cursor = SECTIONS[si].start; stepIndex = 0; lastDrawn = -1;
+        if (playing){ drawQueue.length = 0; nextStepTime = ctx.currentTime + 0.05; }
+        else paint(cursor, 0);
+      }
+    };
+  });
+}
+bindTimeline();
+
+// clicking a chord card swaps the F voicing
+document.querySelectorAll(".cc").forEach(c => {
+  c.onclick = () => {
+    const n = c.dataset.chord;
+    if (n === "F" || n === "Fmaj7"){
+      fVoicing = n;
+      lastChordShown = null; lastDrawn = -1;
+      paint(cursor, lastStep < 0 ? 0 : lastStep);
+    }
+  };
+});
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT") return;
+  if (e.code === "Space"){ e.preventDefault(); toggle(); }
+  else if (e.key === "r" || e.key === "R") $("restart").onclick();
+  else if (e.key === "ArrowRight"){ e.preventDefault(); cursor = (cursor + 1) % TOTAL; stepIndex = 0; lastDrawn = -1; if(playing){drawQueue.length=0;nextStepTime=ctx.currentTime+0.05;} else paint(cursor,0); }
+  else if (e.key === "ArrowLeft"){ e.preventDefault(); cursor = (cursor - 1 + TOTAL) % TOTAL; stepIndex = 0; lastDrawn = -1; if(playing){drawQueue.length=0;nextStepTime=ctx.currentTime+0.05;} else paint(cursor,0); }
+  else if (e.key === "ArrowUp" || e.key === "ArrowDown"){
+    e.preventDefault();
+    const t = $("tempo");
+    t.value = Math.min(120, Math.max(40, +t.value + (e.key === "ArrowUp" ? 5 : -5)));
+    t.oninput({target:t});
+  }
+});
+
+/* initial paint */
+$("tempoOut").textContent = `${BASE_BPM} BPM · 100%`;
+paint(0, 0);
+</script>
+</body>
+</html>
