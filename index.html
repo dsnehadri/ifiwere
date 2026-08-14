@@ -3,132 +3,208 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Comic Sans ships on Windows, macOS, iOS and Android. Linux usually has
+     neither, so Comic Neue is loaded as a stand-in. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap">
 <title>If I Were — Guitar Karaoke</title>
 <meta name="description" content="A play-along chord and fingerpicking trainer for &quot;If I Were&quot; by Vashti Bunyan.">
 <style>
-  :root{
-    --bg:#14110e; --panel:#241f1a; --panel2:#2c2620; --line:#3a322a;
-    --ink:#f2e9dd; --ink-dim:#b3a493; --ink-faint:#7d7061;
-    --accent:#e8a33d; --accent2:#7fb069; --accent3:#d96f5b;
-    --shadow:0 10px 30px rgba(0,0,0,.45); --r:14px;
-    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #000;
+    color: #fff;
+    font-family: "Comic Sans MS", "Comic Neue", "Chalkboard SE", cursive;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0 0 60px;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    background:
-      radial-gradient(1100px 620px at 12% -8%, #2e2419 0%, transparent 60%),
-      radial-gradient(900px 500px at 92% 4%, #222b23 0%, transparent 58%),
-      var(--bg);
-    color:var(--ink);
-    font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
-    min-height:100vh;padding:0 0 80px;
+  .wrap { max-width: 1150px; margin: 0 auto; padding: 0 14px; }
+
+  /* The one visual trick: sliding rainbow gradient, clipped to the glyphs. */
+  @keyframes rainbow { to { background-position: 200% center; } }
+  .rainbow {
+    background: linear-gradient(90deg,
+      #ff0000, #ff8800, #ffee00, #00ff00, #00ffee, #0088ff, #8800ff, #ff0088, #ff0000);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow 2s linear infinite;
   }
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  @keyframes blink { 50% { opacity: 0; } }
+  .blink { animation: blink 1.1s steps(1) infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .rainbow, .blink { animation: none; }
+    .rainbow { color: #ff0; }
+  }
 
-  header{padding:44px 0 26px}
-  .eyebrow{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
-  h1{font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:-.025em;font-weight:700}
-  h1 em{font-style:normal;color:var(--accent)}
-  .byline{color:var(--ink-dim);margin-top:10px;font-size:17px}
-  .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-  .fact{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--ink-dim)}
-  .fact b{color:var(--ink);font-weight:600}
+  /* ---------- header ---------- */
+  header { text-align: center; padding: 30px 0 20px; }
+  .eyebrow { font-size: 14px; color: #0ff; letter-spacing: 2px; margin-bottom: 6px; }
+  h1 { margin: 0; font-size: clamp(30px, 9vw, 58px); letter-spacing: 2px; }
+  .byline { font-size: 15px; color: #ff0; margin-top: 4px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; justify-content: center; }
+  .fact { border: 3px solid #f0f; padding: 5px 12px; font-size: 13px; color: #fff; }
+  .fact b { color: #0ff; }
 
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin-bottom:16px;font-family:var(--mono)}
+  /* ---------- panels ---------- */
+  .panel { border: 4px dashed #0ff; padding: 16px; background: #000; }
+  h2 { margin: 0 0 14px; font-size: 17px; color: #ff0; letter-spacing: 1px; }
+  h3 { margin: 0 0 8px; font-size: 17px; color: #0ff; }
 
-  .transport{position:sticky;top:0;z-index:60;background:rgba(20,17,14,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:26px}
-  .tbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
-  .btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;transition:.15s;white-space:nowrap}
-  .btn:hover{background:#39312a;border-color:#4d4238}
-  .btn.primary{background:var(--accent);color:#211703;border-color:var(--accent);min-width:118px;text-align:center}
-  .btn.primary:hover{background:#f2b355}
-  .ctl{display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 13px}
-  .ctl label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;font-family:var(--mono)}
-  .ctl output,.ctl select{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600}
-  select{background:#1a1612;border:1px solid var(--line);border-radius:7px;padding:4px 7px;cursor:pointer}
-  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;background:var(--line);border-radius:3px;width:104px;cursor:pointer}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer}
-  input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
-  .beat-dots{display:flex;gap:5px;margin-left:auto;align-items:center}
-  .dot{width:10px;height:10px;border-radius:50%;background:#3a322a;transition:.06s}
-  .dot.beat{box-shadow:inset 0 0 0 1px #5a4c3c}
-  .dot.on{background:var(--accent);box-shadow:0 0 12px var(--accent)}
-  .dot.on.down{background:var(--accent3);box-shadow:0 0 14px var(--accent3)}
+  /* ---------- transport ---------- */
+  .transport {
+    position: sticky; top: 0; z-index: 60;
+    background: #000; border-bottom: 4px solid #ff0;
+    padding: 10px 0; margin-bottom: 20px;
+  }
+  .tbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; justify-content: center; }
+  button {
+    font-family: inherit; font-weight: 700; font-size: 16px;
+    padding: 7px 13px; border: 3px solid #ff0; background: #000; color: #ff0;
+    cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  }
+  button:hover { background: #ff0; color: #000; }
+  .btn.primary { border-color: #0f0; color: #0f0; min-width: 108px; }
+  .btn.primary:hover { background: #0f0; color: #000; }
+  .btn.on { background: #0f0; color: #000; border-color: #0f0; }
+  .ctl { display: flex; align-items: center; gap: 7px; border: 3px solid #f0f; padding: 4px 10px; }
+  .ctl label { font-size: 13px; color: #0ff; }
+  .ctl output { font-size: 14px; color: #fff; }
+  select, input[type=text] {
+    font-family: inherit; font-weight: 700; font-size: 14px;
+    background: #000; color: #fff; border: 2px solid #f0f; padding: 3px 5px; cursor: pointer;
+  }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    height: 6px; width: 100px; background: #f0f; border: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; background: #ff0;
+    border: 2px solid #000; cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; background: #ff0; border: 2px solid #000; cursor: pointer;
+  }
+  .beat-dots { display: flex; gap: 5px; align-items: center; }
+  .dot { width: 13px; height: 13px; border: 2px solid #333; background: #000; }
+  .dot.beat { border-color: #666; }
+  .dot.on { background: #ff0; border-color: #ff0; }
+  .dot.on.down { background: #f00; border-color: #f00; }
 
-  .stage{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;margin-bottom:18px}
-  @media(max-width:920px){.stage{grid-template-columns:1fr}}
+  /* ---------- stage ---------- */
+  .stage { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 920px) { .stage { grid-template-columns: 1fr; } }
 
-  .now{padding:22px;display:flex;gap:22px;align-items:center;min-height:268px}
-  .now-main{flex:1;min-width:0}
-  .now-label{font:700 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px}
-  .now-chord{font-size:clamp(50px,10vw,80px);font-weight:700;letter-spacing:-.03em;line-height:1}
-  .now-frets{font:700 15px var(--mono);color:var(--accent);letter-spacing:.14em;margin-top:6px}
-  .now-sec{color:var(--ink-faint);font-size:13px;margin-top:8px;font-family:var(--mono)}
-  .now-cue{margin-top:12px;font-size:20px;line-height:1.35;color:var(--accent2);font-weight:600;min-height:27px}
-  .now-cue:empty::before{content:"—";color:#4a4038}
-  .cue-cell{display:flex;flex-direction:column;gap:4px}
-  .tl-chords.editing{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px}
-  .cue-cell input{background:#161310;border:1px solid #302921;border-radius:6px;padding:6px 8px;color:var(--ink);font:13px/1.4 inherit;width:100%}
-  .cue-cell input:focus{outline:none;border-color:var(--accent)}
-  .cue-cell input::placeholder{color:#4a4038}
-  .btn.on{background:var(--accent2);color:#12200c;border-color:var(--accent2)}
-  .next-row{margin-top:18px;padding-top:15px;border-top:1px solid var(--line);display:flex;gap:24px}
-  .next-item .k{font:700 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px}
-  .next-item .v{font-size:23px;font-weight:700;color:var(--ink-dim)}
+  .now { display: flex; gap: 18px; align-items: center; min-height: 250px; }
+  .now-main { flex: 1; min-width: 0; }
+  .now-label { font-size: 14px; color: #0f0; letter-spacing: 1px; }
+  .now-chord {
+    font-size: clamp(44px, 9vw, 74px); line-height: 1.05; letter-spacing: 2px;
+    background: linear-gradient(90deg,
+      #ff0000, #ff8800, #ffee00, #00ff00, #00ffee, #0088ff, #8800ff, #ff0088, #ff0000);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: rainbow 2s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .now-chord { animation: none; color: #ff0; } }
+  .now-frets { font-size: 17px; color: #0ff; letter-spacing: 3px; }
+  .now-sec { font-size: 13px; color: #ff0; margin-top: 5px; }
+  .now-cue { margin-top: 10px; font-size: 20px; line-height: 1.3; color: #0f0; min-height: 26px; }
+  .now-cue:empty::before { content: "4"; color: #333; }
+  .next-row { margin-top: 14px; padding-top: 12px; border-top: 3px solid #f0f; display: flex; gap: 20px; }
+  .next-item .k { font-size: 12px; color: #0ff; }
+  .next-item .v { font-size: 23px; color: #fff; }
 
-  .pick{padding:22px}
-  .pattern-grid{display:grid;grid-template-columns:30px repeat(6,1fr);gap:5px}
-  .pg-cell{height:36px;border-radius:7px;background:#1c1815;border:1px solid #302921;display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);color:var(--ink-faint);transition:.1s}
-  .pg-str{background:none;border:none;color:var(--ink-faint);font-size:11px;justify-content:flex-end;padding-right:6px}
-  .pg-cell.hit{background:#33291c;border-color:#5c4a2c;color:var(--accent)}
-  .pg-cell.hit.thumb{background:#3a2620;border-color:#6b4137;color:var(--accent3)}
-  .pg-cell.active{transform:scale(1.09);box-shadow:0 0 0 2px var(--accent);z-index:2}
-  .pg-head{height:20px;font:700 10px var(--mono);letter-spacing:.1em;color:var(--ink-faint);background:none;border:none;justify-content:center}
-  .pg-head.beat{color:var(--accent)}
-  .pima-note{margin-top:14px;font-size:13.5px;color:var(--ink-dim);line-height:1.65}
-  .pima-note b{color:var(--ink)}
+  /* ---------- picking grid ---------- */
+  .pattern-grid { display: grid; grid-template-columns: 28px repeat(6, 1fr); gap: 4px; }
+  .pg-cell {
+    height: 36px; border: 2px solid #333; background: #000;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: #444;
+  }
+  .pg-str { border: none; color: #0ff; font-size: 13px; justify-content: flex-end; padding-right: 5px; }
+  .pg-head { height: 20px; border: none; font-size: 13px; color: #666; justify-content: center; }
+  .pg-head.beat { color: #ff0; }
+  .pg-cell.hit { border-color: #ff0; color: #ff0; }
+  .pg-cell.hit.thumb { border-color: #f00; color: #f00; }
+  .pg-cell.active { background: #ff0; color: #000; }
+  .pg-cell.hit.thumb.active { background: #f00; color: #000; }
+  .pima-note { margin-top: 12px; font-size: 14px; color: #fff; }
+  .pima-note b { color: #0ff; }
 
-  .timeline{padding:20px 22px 22px;margin-bottom:18px}
-  .tl-scroll{max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#4a4038 transparent;padding-right:6px}
-  .tl-scroll::-webkit-scrollbar{width:8px}
-  .tl-scroll::-webkit-scrollbar-thumb{background:#4a4038;border-radius:4px}
-  .tl-sec{margin-bottom:18px}
-  .tl-sec:last-child{margin-bottom:0}
-  .tl-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-  .tl-name{font:700 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
-  .tl-bars{font:11px var(--mono);color:var(--ink-faint)}
-  .tl-loop{font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--ink-faint);transition:.15s}
-  .tl-loop:hover{border-color:var(--accent);color:var(--accent)}
-  .tl-loop.on{background:var(--accent);color:#211703;border-color:var(--accent)}
-  .tl-chords{display:flex;flex-wrap:wrap;gap:5px}
-  .chip{min-width:54px;text-align:center;padding:7px 10px;border-radius:8px;background:#1c1815;border:1px solid #302921;font:700 14px var(--mono);color:var(--ink-dim);cursor:pointer;transition:.12s}
-  .chip:hover{border-color:#5a4c3c;color:var(--ink)}
-  .chip.done{color:var(--ink-faint);opacity:.5}
-  .chip.cur{background:var(--accent);color:#211703;border-color:var(--accent);box-shadow:0 0 18px rgba(232,163,61,.4);opacity:1}
+  /* ---------- timeline ---------- */
+  .timeline { margin-bottom: 16px; }
+  .tl-scroll { max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #f0f #000; padding-right: 5px; }
+  .tl-scroll::-webkit-scrollbar { width: 10px; }
+  .tl-scroll::-webkit-scrollbar-track { background: #000; }
+  .tl-scroll::-webkit-scrollbar-thumb { background: #f0f; }
+  .tl-sec { margin-bottom: 16px; }
+  .tl-sec:last-child { margin-bottom: 0; }
+  .tl-head { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; flex-wrap: wrap; }
+  .tl-name { font-size: 15px; color: #0ff; letter-spacing: 1px; }
+  .tl-bars { font-size: 12px; color: #666; }
+  .tl-loop { font-size: 12px; padding: 2px 8px; border-width: 2px; }
+  .tl-chords { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip {
+    min-width: 52px; padding: 6px 9px; border: 2px solid #333;
+    background: #000; color: #fff; font-size: 15px;
+  }
+  .chip:hover { background: #fff; color: #000; border-color: #fff; }
+  .chip.done { color: #555; border-color: #222; }
+  .chip.cur { background: #ff0; color: #000; border-color: #ff0; }
 
-  .lib{padding:22px;margin-bottom:18px}
-  .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
-  .cc{background:#1c1815;border:1px solid #302921;border-radius:10px;padding:12px 8px 10px;text-align:center;transition:.15s}
-  .cc.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-  .cc-name{font:700 16px var(--mono);margin-bottom:2px}
-  .cc-sub{font:10px var(--mono);color:var(--accent);letter-spacing:.1em;margin-bottom:8px;min-height:12px}
+  /* ---------- cue editing ---------- */
+  .cue-cell { display: flex; flex-direction: column; gap: 3px; }
+  .tl-chords.editing { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 7px; }
+  .cue-cell input {
+    font-family: inherit; font-weight: 700; font-size: 13px; width: 100%;
+    padding: 5px 7px; border: 2px solid #f0f; background: #000; color: #fff;
+  }
+  .cue-cell input:focus { outline: none; border-color: #0f0; }
+  .cue-cell input::placeholder { color: #444; }
+  .bulk { margin-bottom: 14px; padding: 12px; border: 3px solid #0f0; }
+  .bulk p { margin: 0 0 8px; font-size: 13px; color: #fff; }
+  .bulk p b { color: #ff0; }
+  .bulk textarea {
+    font-family: inherit; font-weight: 700; font-size: 13px; line-height: 1.5;
+    width: 100%; min-height: 92px; padding: 8px;
+    background: #000; color: #fff; border: 2px solid #f0f; resize: vertical;
+  }
+  .bulk textarea:focus { outline: none; border-color: #0f0; }
+  .bulk textarea::placeholder { color: #444; }
+  .bulk-row { display: flex; gap: 7px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+  .bulk-row button { font-size: 14px; padding: 5px 10px; border-width: 2px; }
+  .bulk-msg { font-size: 13px; color: #0f0; }
 
-  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
-  .note{padding:22px}
-  .note h3{font-size:15px;margin-bottom:10px;color:var(--ink)}
-  .note p{color:var(--ink-dim);font-size:14px;margin-bottom:10px}
-  .note p:last-child{margin-bottom:0}
-  .note ul{color:var(--ink-dim);font-size:14px;padding-left:18px}
-  .note li{margin-bottom:7px}
-  .note b,.note strong{color:var(--ink);font-weight:600}
-  code{font-family:var(--mono);font-size:.9em;background:#1a1612;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--accent)}
-  .good{border-left:3px solid var(--accent2)}
-  .warn{border-left:3px solid var(--accent3)}
-  footer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:13px;line-height:1.7}
-  kbd{font-family:var(--mono);font-size:11px;background:#1a1612;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-dim)}
+  /* ---------- chord library ---------- */
+  .lib { margin-bottom: 16px; }
+  .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .cc { border: 3px solid #333; padding: 10px 6px 8px; text-align: center; }
+  .cc.cur { border-color: #ff0; }
+  .cc-name { font-size: 19px; color: #fff; }
+  .cc-sub { font-size: 12px; color: #0ff; margin-bottom: 6px; min-height: 14px; letter-spacing: 1px; }
+
+  /* ---------- notes ---------- */
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .note p { margin: 0 0 8px; font-size: 14px; color: #fff; }
+  .note p:last-child { margin-bottom: 0; }
+  .note ul { margin: 0; padding-left: 20px; font-size: 14px; color: #fff; }
+  .note li { margin-bottom: 6px; }
+  .note b, .note strong { color: #ff0; }
+  .note.good { border-color: #0f0; }
+  .note.good h3 { color: #0f0; }
+  .note.warn { border-color: #f00; }
+  .note.warn h3 { color: #f00; }
+  code { font-family: inherit; font-size: 13px; color: #0f0; border: 2px solid #0f0; padding: 0 5px; }
+  footer { margin-top: 26px; padding-top: 18px; border-top: 4px dashed #f0f; font-size: 13px; color: #fff; text-align: center; }
+  footer p { margin: 0 0 8px; }
+  kbd { font-family: inherit; font-size: 12px; border: 2px solid #0ff; color: #0ff; padding: 0 5px; }
 </style>
 </head>
 <body>
@@ -136,7 +212,7 @@
 <div class="wrap">
   <header>
     <div class="eyebrow">Guitar Karaoke</div>
-    <h1>If <em>I</em> Were</h1>
+    <h1 class="rainbow">If I Were</h1>
     <div class="byline">Vashti Bunyan &middot; <i>Lookaftering</i> (2005)</div>
     <div class="facts">
       <span class="fact"><b>Key</b> C major / D minor feel</span>
@@ -214,7 +290,7 @@
   </div>
 
   <div class="panel timeline">
-    <h2>Chord chart &mdash; one chord per bar &middot; <span id="cueHint" style="text-transform:none;letter-spacing:0;font-family:inherit"></span></h2>
+    <h2>Chord chart &mdash; one chord per bar &middot; <span id="cueHint"></span></h2>
     <div class="tl-scroll" id="tl"></div>
   </div>
 
@@ -459,40 +535,40 @@ function diagram(name, size){
   let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${name} chord diagram, frets ${fretStr(name)}">`;
 
   if (base === 1)
-    s += `<rect x="${padX - 1}" y="${padTop - 3}" width="${gw + 2}" height="4" fill="#b3a493" rx="1"/>`;
+    s += `<rect x="${padX - 1}" y="${padTop - 3}" width="${gw + 2}" height="4" fill="#fff" rx="1"/>`;
   else
-    s += `<text x="${padX - 9}" y="${padTop + fy * 0.66}" font-size="${W * 0.115}" fill="#e8a33d" text-anchor="end" font-family="monospace" font-weight="700">${base}</text>`;
+    s += `<text x="${padX - 9}" y="${padTop + fy * 0.66}" font-size="${W * 0.115}" fill="#ff0" text-anchor="end" font-family="monospace" font-weight="700">${base}</text>`;
 
   for (let f = 1; f <= NF; f++)
-    s += `<line x1="${padX}" y1="${padTop + f * fy}" x2="${padX + gw}" y2="${padTop + f * fy}" stroke="#4a4038" stroke-width="1"/>`;
+    s += `<line x1="${padX}" y1="${padTop + f * fy}" x2="${padX + gw}" y2="${padTop + f * fy}" stroke="#0ff" stroke-width="1"/>`;
   for (let i = 0; i < 6; i++)
-    s += `<line x1="${padX + i * sx}" y1="${padTop}" x2="${padX + i * sx}" y2="${padTop + gh}" stroke="#5a4c3c" stroke-width="1"/>`;
+    s += `<line x1="${padX + i * sx}" y1="${padTop}" x2="${padX + i * sx}" y2="${padTop + gh}" stroke="#888" stroke-width="1"/>`;
 
   const b = shape.barre;
   if (b){
     const y = padTop + (b.fret - base) * fy + fy / 2;
-    s += `<rect x="${padX + b.from * sx - sx * 0.3}" y="${y - fy * 0.28}" width="${(b.to - b.from) * sx + sx * 0.6}" height="${fy * 0.56}" rx="${fy * 0.28}" fill="#e8a33d"/>`;
+    s += `<rect x="${padX + b.from * sx - sx * 0.3}" y="${y - fy * 0.28}" width="${(b.to - b.from) * sx + sx * 0.6}" height="${fy * 0.56}" rx="${fy * 0.28}" fill="#ff0"/>`;
     const cx = padX + (b.from + (b.to - b.from) / 2) * sx;
     const fg = shape.fingers[b.to];
-    if (fg) s += `<text x="${cx}" y="${y + W * 0.04}" font-size="${W * 0.11}" fill="#211703" text-anchor="middle" font-weight="700" font-family="monospace">${fg}</text>`;
+    if (fg) s += `<text x="${cx}" y="${y + W * 0.04}" font-size="${W * 0.11}" fill="#000" text-anchor="middle" font-weight="700" font-family="monospace">${fg}</text>`;
   }
 
   shape.frets.forEach((fr, i) => {
     const x = padX + i * sx;
     if (fr < 0){
       const r = W * 0.030;
-      s += `<g stroke="#7d7061" stroke-width="1.6" stroke-linecap="round">
+      s += `<g stroke="#f00" stroke-width="1.6" stroke-linecap="round">
               <line x1="${x-r}" y1="${padTop-r-7}" x2="${x+r}" y2="${padTop+r-7}"/>
               <line x1="${x+r}" y1="${padTop-r-7}" x2="${x-r}" y2="${padTop+r-7}"/>
             </g>`;
     } else if (fr === 0){
-      s += `<circle cx="${x}" cy="${padTop-7}" r="${W*0.032}" fill="none" stroke="#7fb069" stroke-width="1.6"/>`;
+      s += `<circle cx="${x}" cy="${padTop-7}" r="${W*0.032}" fill="none" stroke="#0f0" stroke-width="1.6"/>`;
     } else {
       if (b && fr === b.fret && i >= b.from && i <= b.to) return;   // covered by barre
       const cy = padTop + (fr - base) * fy + fy / 2;
-      s += `<circle cx="${x}" cy="${cy}" r="${sx*0.34}" fill="#e8a33d"/>`;
+      s += `<circle cx="${x}" cy="${cy}" r="${sx*0.34}" fill="#ff0"/>`;
       const fg = shape.fingers[i];
-      if (fg) s += `<text x="${x}" y="${cy + W*0.04}" font-size="${W*0.11}" fill="#211703" text-anchor="middle" font-weight="700" font-family="monospace">${fg}</text>`;
+      if (fg) s += `<text x="${x}" y="${cy + W*0.04}" font-size="${W*0.11}" fill="#000" text-anchor="middle" font-weight="700" font-family="monospace">${fg}</text>`;
     }
   });
   return s + `</svg>`;
@@ -535,10 +611,24 @@ function buildTimeline(){
         const gi = s.start + i;
         const chip = `<button class="chip" data-i="${gi}">${c}</button>`;
         return editingCues
-          ? `<div class="cue-cell">${chip}<input data-cue="${gi}" value="${esc(cues[gi] || "")}" placeholder="bar ${i+1}…" aria-label="Cue for ${s.name} bar ${i+1}"></div>`
+          ? `<div class="cue-cell">${chip}<input data-cue="${gi}" value="${esc(cues[gi] || "")}" placeholder="${gi+1}…" aria-label="Cue for bar ${gi+1}"></div>`
           : chip;
       }).join("")}</div>
     </div>`).join("");
+
+  if (editingCues) $("tl").insertAdjacentHTML("afterbegin", `
+    <div class="bulk">
+      <p>Paste cues in bulk, one per line, as <b>bar number : text</b> &mdash; e.g. <b>13: your line here</b>.
+      Bars are numbered <b>1&ndash;${TOTAL}</b> straight through the song; each box below shows its own number.
+      A cue holds on screen until the next one starts, so you only need the bars where a new line begins.</p>
+      <textarea id="bulkText" placeholder="13: …&#10;15: …&#10;17: …" spellcheck="false"></textarea>
+      <div class="bulk-row">
+        <button class="btn" id="bulkApply">Apply</button>
+        <button class="btn" id="bulkLoad">Load current</button>
+        <button class="btn" id="bulkClear">Clear all</button>
+        <span class="bulk-msg" id="bulkMsg"></span>
+      </div>
+    </div>`);
   $("cueHint").innerHTML = editingCues
     ? `<span style="color:var(--accent2)">typing cues — each one stays on screen until the next</span>`
     : ``;
@@ -678,6 +768,40 @@ function bindTimeline(){
     /* let the transport keys keep working without hijacking typing */
     inp.onkeydown = e => e.stopPropagation();
   });
+
+  const bt = $("bulkText");
+  if (bt){
+    bt.onkeydown = e => e.stopPropagation();
+    $("bulkApply").onclick = () => {
+      let applied = 0, skipped = 0;
+      bt.value.split(/\r?\n/).forEach(line => {
+        if (!line.trim()) return;
+        const m = line.match(/^\s*(\d+)\s*[:|\t]\s*(.*)$/);
+        if (!m){ skipped++; return; }
+        const n = +m[1] - 1, text = m[2].trim();
+        if (n < 0 || n >= TOTAL){ skipped++; return; }
+        if (text) cues[n] = text; else delete cues[n];
+        applied++;
+      });
+      saveCues();
+      buildTimeline(); bindTimeline();
+      lastDrawn = -1; paint(cursor, lastStep < 0 ? 0 : lastStep);
+      $("bulkMsg").textContent = `${applied} cue${applied === 1 ? "" : "s"} set` +
+        (skipped ? ` · ${skipped} line${skipped === 1 ? "" : "s"} skipped (no bar number)` : "");
+    };
+    $("bulkLoad").onclick = () => {
+      bt.value = Object.keys(cues).map(Number).sort((a,b) => a - b)
+        .map(n => `${n + 1}: ${cues[n]}`).join("\n");
+      $("bulkMsg").textContent = "loaded — edit and Apply, or copy to keep a backup";
+    };
+    $("bulkClear").onclick = () => {
+      if (!confirm("Delete every cue you've typed? This can't be undone.")) return;
+      cues = {}; saveCues();
+      buildTimeline(); bindTimeline();
+      lastDrawn = -1; paint(cursor, lastStep < 0 ? 0 : lastStep);
+      $("bulkMsg").textContent = "all cues cleared";
+    };
+  }
   document.querySelectorAll(".tl-loop").forEach(b =>
     b.onclick = () => {
       const si = +b.dataset.loop;
