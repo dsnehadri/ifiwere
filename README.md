@@ -57,11 +57,17 @@ the D string, `p–i–m–a–m–i` throughout. The chord order comes from a s
 transcription. The 3/4 reading is inferred, and checks out: 76 bars at 97 BPM ≈ 2:21 against
 the track's 2:15.
 
-**Just Like a Woman** — the chords and capo are well documented and agree across sources.
-**The bar counts are my model, not a transcription** — sources give chord order but not
-bar-exact timing. Four bars per line and sixteen per section puts it at 4:43 against the
-track's 4:52. **The picking patterns are idiomatic, not transcribed**; the record is a band
-arrangement with strummed guitar, so the "Strum" pattern is closest to what you hear.
+**Just Like a Woman** — the chords, capo and section order come from Eyolf Østrem's
+[dylanchords](https://www.dylanchords.com/07_bob/just_like_a_woman) transcription of the
+Blonde on Blonde version, the most careful Dylan source there is. The picking follows the
+arpeggio tabbed there for the record. **The bar counts are still a model** — the
+transcription gives chord order and line breaks but not bar-exact durations, so this page
+puts one chord in each bar. That comes to 138 bars, about 4:48 against the track's 4:52.
+
+Worth knowing what the transcription corrected: the verse is **six** lines, not four, and
+only the first two run `C F G C`; the chorus is **three** lines of `C Em Dm F`; the `G7`
+turnaround belongs to the end of the verse, not the chorus; the bridge uses **E**, not `E7`.
+The guitar on the record is **picked, not strummed**.
 
 Treat both as practice scaffolds rather than authoritative transcriptions.
 
