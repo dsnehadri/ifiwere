@@ -4,42 +4,30 @@
 # Blank lines and lines starting with # are ignored.
 #
 # This song has 14 sung lines. They land on these bars:
-#   Verse 1    bars 21, 23, 27, 29, 31, 33, 35
-#   Verse 2    bars 37, 39, 43, 45, 47, 49, 51
+#   Verse 1        bars 21, 23, 27, 29, 31, 33, 35
+#   Verse 2        bars 37, 39, 43, 45, 47, 49, 51
 #
 # A line stays on screen until the next one starts, so you only need
-# the bars where a new line begins.
+# the bars where a new line begins. To pin a line to an exact bar,
+# prefix it with the bar number:   37: some line
 #
-# To pin a line to an exact bar instead, prefix it with the bar number:
-#     37: some line
-# Numbered lines win over the sequential ones.
-#
-# Save this as ifiwere.txt in this folder (drop the .template),
-# then reload the page. Serve it with a local web server, not file:// --
-# browsers block fetch() on file:// URLs:
+# IMPORTANT: save this as ifiwere.txt (drop the .template) --
+# that is the filename the page fetches. Serve it with a local server,
+# not file://, because browsers block fetch() on file:// URLs:
 #     python3 -m http.server 8000
-#
-# ifiwere.txt is gitignored, so it stays on your machine.
 
 # --- Verse 1 ---
 
-If I were to go away
-Would you follow me to the ends of the earth
-To show me what your love is worth
-Or would you go and buy a car
-Shrug your shoulders, say, "There you are
-She didn't love me anyway
-If she had, she would have stayed"
+
+
+
+
+
+
 
 # --- Verse 2 ---
 
-If I were to go away
-Would I always look for your beautiful face
-In every crowd, every place
-Or would I go and buy a hat
-Turn my shoulders, say, "That is that
-He didn't love me, now it's clear
-If he had, he would be here"
+
 
 
 

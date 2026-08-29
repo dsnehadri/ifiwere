@@ -14,14 +14,14 @@
 #   Pre-chorus 3   bars 68, 70, 71, 73
 #   Chorus (out)   bars 75, 77, 79, 81, 83, 85, 87, 89
 #
-# NOTE: choruses repeat -- paste the chorus lines again for each chorus.
-# The final chorus has 8 slots (it runs double).
+# A line stays on screen until the next one starts, so you only need
+# the bars where a new line begins. To pin a line to an exact bar,
+# prefix it with the bar number:   37: some line
 #
-# A line stays on screen until the next one starts. To pin a line to an
-# exact bar, prefix it with the bar number:  37: some line
-#
-# Save as goaway.txt in this folder, serve with: python3 -m http.server 8000
-# goaway.txt is gitignored, so it stays on your machine.
+# IMPORTANT: save this as goaway.txt (drop the .template) --
+# that is the filename the page fetches. Serve it with a local server,
+# not file://, because browsers block fetch() on file:// URLs:
+#     python3 -m http.server 8000
 
 # --- Verse 1 ---
 

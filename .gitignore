@@ -1,3 +1,4 @@
-# Your pasted lyrics stay on your machine.
-# The templates are tracked; the files you actually fill in are not,
-# so they can never be committed to a public Pages site by accident.
+# Lyric files (lyrics/*.txt) are tracked and published with the site,
+# by deliberate choice. If you ever want one kept off the public page,
+# add it here, e.g.:
+#   lyrics/somesong.txt
