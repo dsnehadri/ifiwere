@@ -1,0 +1,82 @@
+# Go Away - Strawberry Switchblade
+#
+# Paste the sung lines below, ONE PER LINE, in the order they are sung.
+# Blank lines and lines starting with # are ignored.
+#
+# This song has 40 sung lines. They land on these bars:
+#   Verse 1        bars 9, 12, 14, 16
+#   Pre-chorus 1   bars 18, 20, 21, 23
+#   Chorus 1       bars 25, 27, 29, 31
+#   Verse 2        bars 32, 35, 37, 39
+#   Pre-chorus 2   bars 41, 43, 44, 46
+#   Chorus 2       bars 48, 50, 52, 54
+#   Verse 3        bars 59, 62, 64, 66
+#   Pre-chorus 3   bars 68, 70, 71, 73
+#   Chorus (out)   bars 75, 77, 79, 81, 83, 85, 87, 89
+#
+# NOTE: choruses repeat -- paste the chorus lines again for each chorus.
+# The final chorus has 8 slots (it runs double).
+#
+# A line stays on screen until the next one starts. To pin a line to an
+# exact bar, prefix it with the bar number:  37: some line
+#
+# Save as goaway.txt in this folder, serve with: python3 -m http.server 8000
+# goaway.txt is gitignored, so it stays on your machine.
+
+# --- Verse 1 ---
+
+
+
+
+
+# --- Pre-chorus 1 ---
+
+
+
+
+
+# --- Chorus 1 ---
+
+
+
+
+
+# --- Verse 2 ---
+
+
+
+
+
+# --- Pre-chorus 2 ---
+
+
+
+
+
+# --- Chorus 2 ---
+
+
+
+
+
+# --- Verse 3 ---
+
+
+
+
+
+# --- Pre-chorus 3 ---
+
+
+
+
+
+# --- Chorus (out) ---
+
+
+
+
+
+
+
+

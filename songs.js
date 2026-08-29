@@ -131,5 +131,73 @@ justlikeawoman: {
       body:"<p>The <b>chords, capo and section order</b> are from Eyolf &Oslash;strem's dylanchords transcription of the Blonde on Blonde version &mdash; the most careful source for Dylan there is. The <b>picking</b> follows the arpeggio tabbed there for the record.</p><p>The <b>bar counts are still my model.</b> The transcription gives chord order and line breaks but not bar-exact durations; this page puts one chord in each bar. That comes to 138 bars, about 4:48 against the track's 4:52 &mdash; a good fit, but not proof.</p>" }
   ]
 }
+,
+
+goaway: {
+  title: "Go Away",
+  artist: "Strawberry Switchblade",
+  album: "b-side of Trees and Flowers (1983); LP Strawberry Switchblade (1985)",
+  bpm: 127,
+  stepsPerBar: 8,
+  beatsPerBar: 4,
+  cueKey: "goaway-cues-v1",
+  gridStrings: [[5,"e"],[4,"B"],[3,"G"],[2,"D"],[1,"A"],[0,"E"]],
+  facts: [
+    ["Key","B minor"],
+    ["Capo","none &mdash; it's a barre workout"],
+    ["Metre","4/4 &mdash; one chord per bar"],
+    ["Tempo","127 BPM"],
+    ["Feel","jangly eighth notes"],
+    ["Tuning","Standard"]
+  ],
+  shapes: {
+    G:     { frets:[3,2,0,0,0,3], fingers:[2,1,0,0,0,3], bass:0, alt:2, sub:"" },
+    "F#":  { frets:[2,4,4,3,2,2], fingers:[1,3,4,2,1,1], bass:0, alt:1, barre:{fret:2,from:0,to:5}, sub:"barre" },
+    Bm:    { frets:[-1,2,4,4,3,2], fingers:[0,1,3,4,2,1], bass:1, alt:2, barre:{fret:2,from:1,to:5}, sub:"barre" },
+    E:     { frets:[0,2,2,1,0,0], fingers:[0,2,3,1,0,0], bass:0, alt:1, sub:"" },
+    "F#m": { frets:[2,4,4,2,2,2], fingers:[1,3,4,1,1,1], bass:0, alt:1, barre:{fret:2,from:0,to:5}, sub:"barre" },
+    B:     { frets:[-1,2,4,4,4,2], fingers:[0,1,2,3,4,1], bass:1, alt:2, barre:{fret:2,from:1,to:5}, sub:"barre" },
+    A:     { frets:[-1,0,2,2,2,0], fingers:[0,0,1,2,3,0], bass:1, alt:2, sub:"" },
+    "C#m": { frets:[-1,4,6,6,5,4], fingers:[0,1,3,4,2,1], bass:1, alt:2, barre:{fret:4,from:1,to:5}, sub:"Bm, up 2" }
+  },
+  sections: [
+    { name:"Intro",        chords:"G F# Bm E G F# Bm E" },
+    { name:"Verse 1",      chords:"G F# Bm E G F# Bm E F#m", lines:[0,3,5,7] },
+    { name:"Pre-chorus 1", chords:"B A E F#m B A E", lines:[0,2,3,5] },
+    { name:"Chorus 1",     chords:"E Bm E Bm E Bm E", lines:[0,2,4,6] },
+    { name:"Verse 2",      chords:"G F# Bm E G F# Bm E F#m", lines:[0,3,5,7] },
+    { name:"Pre-chorus 2", chords:"B A E F#m B A C#m", lines:[0,2,3,5] },
+    { name:"Chorus 2",     chords:"E Bm E Bm E Bm E", lines:[0,2,4,6] },
+    { name:"Bridge",       chords:"G F# Bm E" },
+    { name:"Verse 3",      chords:"G F# Bm E G F# Bm E F#m", lines:[0,3,5,7] },
+    { name:"Pre-chorus 3", chords:"B A E F#m B A C#m", lines:[0,2,3,5] },
+    { name:"Chorus (out)", chords:"E Bm E Bm E Bm E Bm E Bm E Bm E Bm E", lines:[0,2,4,6,8,10,12,14] },
+    { name:"Outro",        chords:"G F# Bm E G F# Bm E G" }
+  ],
+  patterns: [
+    { name:"Jangle strum",
+      steps:[{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"}],
+      desc:"Straight eighth notes, <b>down-up all the way</b>, light and even. This is the janglepop engine &mdash; the 1983 recording is driven by strummed jangle, not picking. Keep the wrist loose; the shimmer comes from never digging in." },
+    { name:"Jangle arpeggio",
+      steps:[{b:1,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"},{s:4,f:"m"},{s:5,f:"a"},{s:4,f:"m"},{s:3,f:"i"}],
+      desc:"A broken-chord shimmer: bass note, then the fingers circle the top three strings. Not from the record &mdash; an idiomatic way to play it quietly while keeping the eighth-note motion of the strummed original." },
+    { name:"Alternating bass",
+      steps:[{b:1,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"},{b:2,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"}],
+      desc:"Root on beat 1, alternate bass on beat 3, fingers filling above. Watch the grid &mdash; the thumb's strings change with every chord, and on the barre chords both bass notes sit under the same finger." },
+    { name:"Sparse (learning)",
+      steps:[{b:1,f:"p"},null,{s:4,f:"m"},null,{b:2,f:"p"},null,{s:5,f:"a"},null],
+      desc:"Four notes a bar on the beats. This song changes chords every bar and most of them are barres &mdash; drill the changes with this before adding speed. The G&rarr;F#&rarr;Bm run is the one to get smooth." }
+  ],
+  notes: [
+    { cls:"good", h:"One shape, moved around",
+      body:"<p>Five of the eight chords &mdash; <b>F#</b>, <b>F#m</b>, <b>Bm</b>, <b>B</b> and <b>C#m</b> &mdash; are barres from the same family, and <b>C#m</b> is literally the Bm shape slid up two frets.</p><p>The verse is a loop of <code>G F# Bm E</code>: open, barre, barre, open. That descent from G through F# to Bm is the hook of the harmony &mdash; practise those three changes until the barre lands without a gap.</p>" },
+    { h:"The lines straddle the loop",
+      body:"<p>Unusually, the sung lines don't start where the chord loop restarts. Verse lines begin on bars <b>1, 4, 6 and 8</b> of the nine-bar verse &mdash; the second line starts mid-loop on the E. The cue slots follow the transcription, so paste your lines in order and they'll land where they're actually sung.</p><p>Also worth noticing: pre-chorus 1 ends <code>A&nbsp;E</code>, but pre-choruses 2 and 3 end <code>A&nbsp;C#m</code>. Same music, different exit.</p>" },
+    { h:"Two records, same chords",
+      body:"<p>There are two canonical versions: the <b>1983 b-side</b> of Trees and Flowers &mdash; jangly, guitar-driven, the one worth playing along with &mdash; and the <b>1985 album version</b>, which is synthpop. The chords are the same; the guitar is far more audible on the b-side.</p><p>Timing here is modelled on the album cut (127 BPM, 3:09).</p>" },
+    { cls:"warn", h:"Where this came from",
+      body:"<p>The <b>chords, section order and line positions</b> follow a published transcription of the 1985 studio version, and the core <code>G F# Bm E</code> loop is corroborated by a second transcription and by independent audio chord-detection. Good agreement, three ways.</p><p>The <b>bar counts are still a model</b> &mdash; one chord per bar throughout, which comes to 98 bars, about 3:05 against the album's 3:09. The intro is played twice here where the transcription writes it once.</p><p><b>No source documents the right hand.</b> The 1983 record is strummed jangle; the strum pattern is closest to it, and the picking patterns are idiomatic alternatives, not transcriptions.</p>" }
+  ]
+}
 
 };

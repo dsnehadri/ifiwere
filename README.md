@@ -6,12 +6,13 @@ exactly which string each finger plucks on each beat.
 
 **Live: https://dsnehadri.github.io/ifiwere/**
 
-Two songs so far, picked from the selector at the top:
+Three songs so far, picked from the selector at the top:
 
 | Song | Artist | Key | Metre | Tempo |
 |---|---|---|---|---|
 | If I Were | Vashti Bunyan | C major | 3/4 | 97 BPM |
 | Just Like a Woman | Bob Dylan | E major (capo 4, C shapes) | 4/4 | 115 BPM |
+| Go Away | Strawberry Switchblade | B minor | 4/4 | 127 BPM |
 
 ## Features
 
@@ -88,7 +89,15 @@ only the first two run `C F G C`; the chorus is **three** lines of `C Em Dm F`; 
 turnaround belongs to the end of the verse, not the chorus; the bridge uses **E**, not `E7`.
 The guitar on the record is **picked, not strummed**.
 
-Treat both as practice scaffolds rather than authoritative transcriptions.
+**Go Away** — the chords, section order and line positions follow a published transcription
+of the 1985 studio version; the core `G F# Bm E` loop is corroborated by a second
+transcription and by independent audio chord-detection. The bar counts are a one-chord-per-bar
+model (98 bars ≈ 3:05 vs the album's 3:09), and **no source documents the right hand** — the
+1983 b-side is strummed jangle, so the strum pattern is closest to the record and the picking
+patterns are idiomatic alternatives. Note the C#m: pre-choruses 2 and 3 end `A C#m` where
+pre-chorus 1 ends `A E`.
+
+Treat all of these as practice scaffolds rather than authoritative transcriptions.
 
 ## Layout
 
