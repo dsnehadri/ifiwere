@@ -18,6 +18,7 @@ let lyricStatus = "";   // set when cues came from lyrics/<id>.txt
 let bpm = 100, capo = 0, soundMode = "both";
 let playing = false, cursor = 0, loopSection = null;
 let ctx = null, master = null, nextStepTime = 0, stepIndex = 0, schedTimer = null;
+let countIn = 0;   // steps of count-in still to play before the song starts
 const drawQueue = [];
 
 const stepsPerBeat = () => SONG.stepsPerBar / SONG.beatsPerBar;
@@ -122,8 +123,19 @@ function scheduler(){
      slider again resumes smoothly instead of firing a burst of catch-up. */
   if (bpm <= 0){ nextStepTime = ctx.currentTime + 0.05; return; }
   while (nextStepTime < ctx.currentTime + 0.12){
-    scheduleStep(cursor, stepIndex, nextStepTime);
-    advance();
+    if (countIn > 0){
+      const done = SONG.stepsPerBar - countIn;          // 0 .. stepsPerBar-1
+      const spb  = stepsPerBeat();
+      if (done % spb === 0){
+        click(nextStepTime, done === 0);
+        drawQueue.push({ count: done / spb + 1, when: nextStepTime });
+      }
+      countIn--;
+      nextStepTime += stepDur();
+    } else {
+      scheduleStep(cursor, stepIndex, nextStepTime);
+      advance();
+    }
   }
 }
 
@@ -132,6 +144,8 @@ function start(){
   if (ctx.state === "suspended") ctx.resume();
   playing = true;
   stepIndex = 0;
+  countIn = SONG.stepsPerBar;          // one full bar counted in
+  showCountIn(0);
   nextStepTime = ctx.currentTime + 0.08;
   schedTimer = setInterval(scheduler, 25);
   $("play").innerHTML = "&#10074;&#10074; Pause";
@@ -140,6 +154,8 @@ function start(){
 
 function stop(){
   playing = false;
+  countIn = 0;
+  $("countin").classList.remove("on");
   clearInterval(schedTimer);
   schedTimer = null;
   drawQueue.length = 0;
@@ -418,12 +434,29 @@ function paint(idx, step){
   }
 }
 
+/* One bar counted in before the song starts, so you can get your hands ready. */
+function showCountIn(beat){
+  const el = $("countin"), n = SONG.beatsPerBar;
+  if (beat < 1){ el.classList.add("on"); el.innerHTML = ""; return; }
+  let pips = "";
+  for (let i = 1; i <= n; i++) pips += '<span class="pip' + (i <= beat ? " lit" : "") + '"></span>';
+  el.classList.add("on");
+  el.innerHTML = "<b>" + beat + '</b><span class="pips">' + pips + "</span>";
+}
+
 function frame(){
   if (playing && ctx){
     const now = ctx.currentTime;
     let ev = null;
     while (drawQueue.length && drawQueue[0].when <= now) ev = drawQueue.shift();
-    if (ev) paint(ev.idx, ev.step);
+    if (ev){
+      if (ev.count){
+        showCountIn(ev.count);
+      } else {
+        $("countin").classList.remove("on");
+        paint(ev.idx, ev.step);
+      }
+    }
   }
   requestAnimationFrame(frame);
 }
