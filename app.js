@@ -12,6 +12,7 @@ const esc = t => String(t).replace(/[&<>"]/g, c =>
 /* ---- per-song state, all rebuilt by loadSong() ---- */
 let SONG, SONG_ID, EVENTS = [], TOTAL = 0, LINE_BARS = [];
 let pattern, cues = {}, editingCues = false;
+let lyricStatus = "";   // set when cues came from lyrics/<id>.txt
 
 /* ---- transport state ---- */
 let bpm = 100, capo = 0, soundMode = "both";
@@ -224,6 +225,52 @@ function cueFor(idx){
   return "";
 }
 
+/* ------------------------------------------------------------
+   Optional local lyric file: lyrics/<song id>.txt
+
+   Never committed (see .gitignore) and never shipped -- this only
+   reads whatever the user has put on their own machine.  Plain lines
+   fill the sung-line slots in order; a "12: text" line pins that bar
+   and wins over the sequential fill.
+   ------------------------------------------------------------ */
+function parseLyricFile(text){
+  const out = {}, plain = [];
+  text.split(/\r?\n/).forEach(raw => {
+    const line = raw.trim();
+    if (!line || line.charAt(0) === "#") return;
+    const m = line.match(/^(\d+)\s*[:|]\s*(.*)$/);
+    if (m){
+      const n = +m[1] - 1, t = m[2].trim();
+      if (n >= 0 && n < TOTAL && t) out[n] = t;
+    } else {
+      plain.push(line);
+    }
+  });
+  plain.slice(0, LINE_BARS.length).forEach((t, i) => {
+    if (out[LINE_BARS[i]] === undefined) out[LINE_BARS[i]] = t;
+  });
+  return out;
+}
+
+function loadLyricFile(id){
+  fetch("lyrics/" + id + ".txt", { cache:"no-store" })
+    .then(r => r.ok ? r.text() : null)
+    .then(text => {
+      if (text == null || SONG_ID !== id) return;      // song switched while fetching
+      const parsed = parseLyricFile(text);
+      const n = Object.keys(parsed).length;
+      if (!n) return;
+      cues = parsed;
+      lyricStatus = '<span style="color:#0f0">&mdash; ' + n +
+        ' cue' + (n === 1 ? "" : "s") + ' loaded from <b>lyrics/' + id +
+        '.txt</b>; edits here won\'t change that file</span>';
+      buildTimeline(); bindTimeline();
+      lastDrawn = -1;
+      paint(cursor, lastStep < 0 ? 0 : lastStep);
+    })
+    .catch(() => {});                                   // no file, or opened over file://
+}
+
 /* ============================================================
    Rendering
    ============================================================ */
@@ -263,7 +310,8 @@ function buildTimeline(){
       '</div></div>');
 
   $("cueHint").innerHTML = editingCues
-    ? '<span style="color:#0f0">&mdash; each cue stays on screen until the next</span>' : "";
+    ? '<span style="color:#0f0">&mdash; each cue stays on screen until the next</span>'
+    : lyricStatus;
 }
 
 function buildLib(){
@@ -407,6 +455,7 @@ function loadSong(id){
   pattern = SONG.patterns[0];
   editingCues = false;
 
+  lyricStatus = "";
   try { cues = JSON.parse(localStorage.getItem(SONG.cueKey) || "{}"); } catch(_){ cues = {}; }
 
   /* header */
@@ -435,6 +484,7 @@ function loadSong(id){
   buildLib(); buildPatGrid(); buildTimeline(); bindTimeline();
   markPattern(EVENTS[0].chord);
   paint(0, 0);
+  loadLyricFile(id);      // overrides the stored cues if the file exists
 }
 
 /* ============================================================

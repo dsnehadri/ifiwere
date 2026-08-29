@@ -1,0 +1,40 @@
+# If I Were - Vashti Bunyan
+#
+# Paste the sung lines below, ONE PER LINE, in the order they are sung.
+# Blank lines and lines starting with # are ignored.
+#
+# This song has 14 sung lines. They land on these bars:
+#   Verse 1    bars 21, 23, 27, 29, 31, 33, 35
+#   Verse 2    bars 37, 39, 43, 45, 47, 49, 51
+#
+# A line stays on screen until the next one starts, so you only need
+# the bars where a new line begins.
+#
+# To pin a line to an exact bar instead, prefix it with the bar number:
+#     37: some line
+# Numbered lines win over the sequential ones.
+#
+# Save this as ifiwere.txt in this folder (drop the .template),
+# then reload the page. Serve it with a local web server, not file:// --
+# browsers block fetch() on file:// URLs:
+#     python3 -m http.server 8000
+#
+# ifiwere.txt is gitignored, so it stays on your machine.
+
+# --- Verse 1 ---
+
+
+
+
+
+
+
+
+# --- Verse 2 ---
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+# Your pasted lyrics stay on your machine.
+# The templates are tracked; the files you actually fill in are not,
+# so they can never be committed to a public Pages site by accident.
+lyrics/*.txt
+!lyrics/*.template.txt

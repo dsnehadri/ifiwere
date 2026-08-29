@@ -15,17 +15,17 @@ Two songs so far, picked from the selector at the top:
 
 ## Features
 
-- **Timed chord scroller** — the full chart scrolls and highlights in time.
+- **Timed chord chart** — the whole song is shown at once and highlights in time.
 - **Audio play-along** — a synthesised plucked guitar plays the pattern, with an optional
   metronome click. No audio files, no external requests; everything is Web Audio.
 - **Chord diagrams** — SVG, with finger numbers, barre rendering and position markers.
 - **Animated picking grid** — string rows against the beats of the bar, showing which finger
   plucks what. The thumb's string is re-marked per chord, so alternating-bass patterns show
   the correct bass note for the chord you're actually on.
-- **Multiple right-hand patterns per song**, including strummed options where the record is
-  strummed, and a sparse "learning" pattern for locking changes in before adding the roll.
+- **Multiple right-hand patterns per song**, plus a sparse "learning" pattern for locking
+  the changes in before adding the full roll.
 - **Editable cues with built-in alignment** — see below.
-- **Tempo 40–120%**, **capo 0–7**, and **per-section looping**.
+- **Tempo 0–120%** (0 freezes on the current bar), **capo 0–7**, and **per-section looping**.
 
 Keyboard: <kbd>Space</kbd> play/pause, <kbd>R</kbd> restart, <kbd>←</kbd>/<kbd>→</kbd> step a
 chord, <kbd>↑</kbd>/<kbd>↓</kbd> tempo.
@@ -43,6 +43,25 @@ those bars. Each cue holds on screen until the next begins. `Apply numbered` (`b
 gives per-bar control, `Load current` round-trips for backup, `Clear all` wipes. Everything
 lives in your browser's local storage, keyed per song — nothing is uploaded, and clearing
 browser data clears it.
+
+### Pasting them from a file instead
+
+Each song has a template in [`lyrics/`](lyrics/). Copy `lyrics/<song>.template.txt` to
+`lyrics/<song>.txt`, paste the sung lines in one per line, save, reload. The page picks the
+file up automatically and it overrides anything stored in the browser.
+
+The template lists which bars each line lands on, and you can pin a line to an exact bar with
+`37: some line` if the sequential fill puts one in the wrong place.
+
+Two things to know:
+
+- **`lyrics/*.txt` is gitignored.** Only the `.template.txt` files are tracked. Your filled-in
+  files stay on your machine and cannot be pushed to the public Pages site by a stray
+  `git add -A`. If you ever want them published, you would have to remove that rule
+  deliberately — worth thinking about first, since publishing lyrics is the part that needs a
+  licence.
+- **It needs a local web server.** Browsers block `fetch()` on `file://` URLs, so open it via
+  `python3 -m http.server 8000`, not by double-clicking `index.html`.
 
 Chord progressions, voicings and structure are factual musical information presented for
 study and practice. Please support these artists by buying their records.
@@ -78,6 +97,7 @@ Treat both as practice scaffolds rather than authoritative transcriptions.
 | `index.html` | Page shell and stylesheet |
 | `songs.js` | All song data — shapes, sections, patterns, notes, alignment maps |
 | `app.js` | The engine; knows nothing about any particular song |
+| `lyrics/` | Templates for pasting your own lyric cues in; filled-in files are gitignored |
 
 Adding a song means adding one entry to `SONGS` in `songs.js`. Nothing else needs touching.
 
