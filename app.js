@@ -117,6 +117,9 @@ function advance(){
 }
 
 function scheduler(){
+  /* 0% tempo: hold position and keep the clock fresh, so raising the
+     slider again resumes smoothly instead of firing a burst of catch-up. */
+  if (bpm <= 0){ nextStepTime = ctx.currentTime + 0.05; return; }
   while (nextStepTime < ctx.currentTime + 0.12){
     scheduleStep(cursor, stepIndex, nextStepTime);
     advance();
@@ -347,8 +350,9 @@ function paint(idx, step){
       c.classList.toggle("done", i < idx);
     });
     const cur = document.querySelector(".chip.cur");
-    if (cur){
-      const box = $("tl"), top = cur.offsetTop - box.offsetTop;
+    const box = $("tl");
+    if (cur && box.scrollHeight > box.clientHeight + 2){
+      const top = cur.offsetTop - box.offsetTop;
       if (top < box.scrollTop || top > box.scrollTop + box.clientHeight - 60)
         box.scrollTo({ top: top - box.clientHeight/2, behavior:"smooth" });
     }
@@ -533,8 +537,9 @@ $("cueEdit").onclick = () => {
   lastDrawn = -1; paint(cursor, lastStep < 0 ? 0 : lastStep);
 };
 $("tempo").oninput = e => {
-  bpm = Math.round(SONG.bpm * e.target.value / 100);
-  $("tempoOut").textContent = bpm + " BPM · " + e.target.value + "%";
+  const pct = +e.target.value;
+  bpm = Math.round(SONG.bpm * pct / 100);
+  $("tempoOut").textContent = bpm <= 0 ? "frozen · 0%" : bpm + " BPM · " + pct + "%";
 };
 $("capo").onchange = e => { capo = +e.target.value; };
 $("sound").onchange = e => { soundMode = e.target.value; };
@@ -556,7 +561,7 @@ document.addEventListener("keydown", e => {
   else if (e.key === "ArrowUp" || e.key === "ArrowDown"){
     e.preventDefault();
     const t = $("tempo");
-    t.value = Math.min(120, Math.max(40, +t.value + (e.key === "ArrowUp" ? 5 : -5)));
+    t.value = Math.min(120, Math.max(0, +t.value + (e.key === "ArrowUp" ? 5 : -5)));
     t.oninput({ target:t });
   }
 });

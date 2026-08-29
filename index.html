@@ -116,10 +116,8 @@
 
   /* ---------- timeline ---------- */
   .timeline { margin-bottom: 16px; }
-  .tl-scroll { max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #f0f #000; padding-right: 5px; }
-  .tl-scroll::-webkit-scrollbar { width: 10px; }
-  .tl-scroll::-webkit-scrollbar-track { background: #000; }
-  .tl-scroll::-webkit-scrollbar-thumb { background: #f0f; }
+  /* the whole chart is shown at once -- no scroller */
+  .tl-scroll { overflow: visible; }
   .tl-sec { margin-bottom: 16px; }
   .tl-sec:last-child { margin-bottom: 0; }
   .tl-head { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; flex-wrap: wrap; }
@@ -213,7 +211,7 @@
     <button class="btn" id="cueEdit" title="Type your own lyric or memory cues. Saved in this browser only.">&#9998; Cues</button>
     <div class="ctl">
       <label for="tempo">Tempo</label>
-      <input type="range" id="tempo" min="40" max="120" step="1" value="100">
+      <input type="range" id="tempo" min="0" max="120" step="1" value="100">
       <output id="tempoOut"></output>
     </div>
     <div class="ctl">
