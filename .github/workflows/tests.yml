@@ -1,0 +1,22 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+# The suite only reads the repository, so the token needs nothing more.
+permissions:
+  contents: read
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # The suite is stdlib-only: it reads songs.js, app.js and the lyric
+      # templates as text, so there is nothing to install.
+      - name: Run the test suite
+        run: python3 -m unittest discover -s tests -v

@@ -2,3 +2,7 @@
 # by deliberate choice. If you ever want one kept off the public page,
 # add it here, e.g.:
 #   lyrics/somesong.txt
+
+# Python bytecode from the test suite
+__pycache__/
+*.pyc
