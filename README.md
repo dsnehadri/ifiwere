@@ -6,13 +6,14 @@ exactly which string each finger plucks on each beat.
 
 **Live: https://dsnehadri.github.io/ifiwere/**
 
-Three songs so far, picked from the selector at the top:
+Four songs so far, picked from the selector at the top:
 
 | Song | Artist | Key | Metre | Tempo |
 |---|---|---|---|---|
 | If I Were | Vashti Bunyan | C major | 3/4 | 97 BPM |
 | Just Like a Woman | Bob Dylan | E major (capo 4, C shapes) | 4/4 | 115 BPM |
 | Go Away | Strawberry Switchblade | B minor | 4/4 | 127 BPM |
+| My Favourite Game | The Cardigans | C minor (capo 1, Bm shapes) | 4/4 | 144 BPM |
 
 ## Features
 
@@ -96,6 +97,24 @@ model (98 bars ≈ 3:05 vs the album's 3:09), and **no source documents the righ
 1983 b-side is strummed jangle, so the strum pattern is closest to the record and the picking
 patterns are idiomatic alternatives. Note the C#m: pre-choruses 2 and 3 end `A C#m` where
 pre-chorus 1 ends `A E`.
+
+**My Favourite Game** — the best-sourced entry here, and the only one whose **right hand is
+transcribed rather than guessed**. The chords, capo, section order and bar count were read
+bar by bar off the Songsterr transcription of the album version, from the Rhythm part
+(electric guitar, clean, capo 1); the five shapes that produces — `Bm A E G F#` at capo 1 —
+match an independent published chord chart. The rhythm part is notated as unbroken eighth
+notes with a shifting subset of the upstrokes ghosted, and the bridge as quarter notes, which
+is exactly what the two "as played" patterns do. There is no fingerpicking on this record, so
+the arpeggio and alternating-bass patterns are labelled as idiomatic alternatives.
+
+Tempo is **144 BPM**, not the 128 some charts quote: 129 bars of 4/4 at 144 is 3:35 against
+the track's 3:36, where 128 would run past 4:00. Two caveats. The one-chord-per-bar grid names
+each bar by its **downbeat** chord, and the fourth bar of each loop really has two — the verse
+`G` moves to `A` halfway, the chorus `F#5` moves to `A` on beat 3 — and nearly every chord is
+pushed an eighth early, onto the *and* of 4. And **the sung-line positions are modelled, not
+sourced**: no transcription covers the vocal, so the 39 cue slots are a two-bar phrase grid
+laid over the bars that have singing over them. Expect to re-pin some by hand.
+
 
 Treat all of these as practice scaffolds rather than authoritative transcriptions.
 

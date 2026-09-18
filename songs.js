@@ -200,4 +200,70 @@ goaway: {
   ]
 }
 
+,
+
+myfavouritegame: {
+  title: "My Favourite Game",
+  artist: "The Cardigans",
+  album: "Gran Turismo (1998)",
+  bpm: 144,
+  stepsPerBar: 8,
+  beatsPerBar: 4,
+  cueKey: "myfavouritegame-cues-v1",
+  gridStrings: [[5,"e"],[4,"B"],[3,"G"],[2,"D"],[1,"A"],[0,"E"]],
+  facts: [
+    ["Sounding key","C minor"],
+    ["Capo","1st fret &mdash; Bm shapes"],
+    ["Metre","4/4 &mdash; one chord per bar"],
+    ["Tempo","144 BPM"],
+    ["Feel","driving eighth notes"],
+    ["Tuning","Standard"]
+  ],
+  shapes: {
+    Bm:    { frets:[-1,2,4,4,3,2], fingers:[0,1,3,4,2,1], bass:1, alt:2, barre:{fret:2,from:1,to:5}, sub:"barre" },
+    A:     { frets:[-1,0,2,2,2,0], fingers:[0,0,1,2,3,0], bass:1, alt:2, sub:"" },
+    E:     { frets:[0,2,2,1,0,0], fingers:[0,2,3,1,0,0], bass:0, alt:1, sub:"" },
+    G:     { frets:[3,2,0,0,0,3], fingers:[2,1,0,0,0,3], bass:0, alt:2, sub:"" },
+    "F#":  { frets:[2,4,4,3,2,2], fingers:[1,3,4,2,1,1], bass:0, alt:1, barre:{fret:2,from:0,to:5}, sub:"barre" },
+    "F#5": { frets:[2,4,4,-1,-1,-1], fingers:[1,3,4,0,0,0], bass:0, alt:1, sub:"power chord" }
+  },
+  sections: [
+    { name:"Intro",     chords:"Bm G E A F# Bm A E G Bm A E G" },
+    { name:"Verse 1",   chords:"Bm A E G Bm A E G Bm A E G", lines:[0,2,4,6] },
+    { name:"Verse 2",   chords:"Bm A E G Bm A E G", lines:[0,2,4,6] },
+    { name:"Chorus 1",  chords:"Bm G A F#5 Bm G A F#5 Bm G E A F#", lines:[0,2,4,6,8,10] },
+    { name:"Interlude", chords:"Bm A E G Bm A E G" },
+    { name:"Verse 3",   chords:"Bm A E G Bm A E G Bm A E G", lines:[0,2,4,6] },
+    { name:"Verse 4",   chords:"Bm A E G Bm A E G", lines:[0,2,4,6] },
+    { name:"Chorus 2",  chords:"Bm G A F#5 Bm G A F#5 Bm G A F#5 Bm G A F#5 Bm G E A F# F#", lines:[0,2,4,6,8,10,12,14,16,18] },
+    { name:"Link",      chords:"Bm A E G" },
+    { name:"Bridge",    chords:"Bm G Bm G Bm G Bm G Bm G Bm G Bm G E A F#", lines:[0,2,4,6,8,10,12] },
+    { name:"Outro",     chords:"Bm A E G Bm A E G Bm A E G" }
+  ],
+  patterns: [
+    { name:"Eighth-note drive (as played)",
+      steps:[{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"}],
+      desc:"<b>Down-up on every eighth, all bar long.</b> This is literally what the rhythm guitar plays &mdash; the transcription never breaks the eighth-note grid from the first bar to the last. On the record a shifting handful of the <i>upstrokes</i> are <b>ghosted</b>: the fretting hand relaxes just enough to deaden them, so they land as a click rather than a chord. Which ones changes bar to bar, so don't drill a fixed map &mdash; keep the arm swinging evenly and let the left hand decide how much rings." },
+    { name:"Bridge quarters (as played)",
+      steps:[{strum:"d"},null,{strum:"d"},null,{strum:"d"},null,{strum:"d"},null],
+      desc:"<b>Four downstrokes, one per beat.</b> Also from the record: the bridge drops out of eighths into plain quarter-note chords, which is what makes it feel like the song has pulled over. Doubles as the learning pattern &mdash; the changes here come every bar at 144 BPM, so lock them with this before putting the eighths back." },
+    { name:"Alternating bass (idiomatic)",
+      steps:[{b:1,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"},{b:2,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"}],
+      desc:"Root on beat 1, fifth on beat 3, fingers filling above. <b>Not on the record</b> &mdash; this is an electric rock track and nobody fingerpicks it. It's here for playing the song unplugged on your own. Watch the grid: the thumb's string moves between the low E and the A depending on the chord." },
+    { name:"Arpeggio (idiomatic)",
+      steps:[{b:1,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"},{s:4,f:"m"},{s:5,f:"a"},{s:4,f:"m"},{s:3,f:"i"}],
+      desc:"Bass note, then the fingers circle the top three strings, keeping the eighth-note motion of the strummed original. <b>Also not on the record</b> &mdash; an idiomatic way to practise the changes quietly. On <b>F#5</b> there is no top end to circle, so it folds down onto the three strings that shape actually has." }
+  ],
+  notes: [
+    { cls:"good", h:"Two loops, and that's the whole song",
+      body:"<p>Everything here is built from two four-bar loops. The verse is <code>Bm A E G</code>. The chorus is <code>Bm G A F#5</code> &mdash; the same chords in a different order, with the F# as a power chord. The bridge just alternates <code>Bm G</code> a bar at a time.</p><p>So there are five shapes total, and only <b>two of them are barres</b>: Bm and F#. A, E and G are open chords you already know. Get the <code>Bm&rarr;A</code> change clean and the rest follows.</p>" },
+    { h:"Capo 1: what you hold isn't what you hear",
+      body:"<p>The record sounds in <b>C minor</b>. Played open that means Cm, Bb, F, Ab and G &mdash; barres all the way down. Put a <b>capo at the 1st fret</b> and the same music comes out of ordinary shapes.</p><p>Every chord name on this page is the <b>shape you hold</b>, not the note that sounds:</p><ul><li>Hold <b>Bm</b>, hear <b>Cm</b> &mdash; the home chord</li><li>Hold <b>A</b>, hear <b>Bb</b></li><li>Hold <b>E</b>, hear <b>F</b></li><li>Hold <b>G</b>, hear <b>Ab</b></li><li>Hold <b>F#</b>, hear <b>G</b> &mdash; the dominant</li></ul><p>The <b>E</b> shape is the interesting one: a major IV chord in a minor key, which is where a lot of the song's lift comes from.</p>" },
+    { h:"The push, and what the grid can't show",
+      body:"<p>Two things the one-chord-per-bar grid flattens out.</p><p><b>Almost every chord arrives early.</b> On the record the next chord is struck on the <i>and of beat 4</i>, an eighth note before its bar. That anticipation is most of what makes the track drive. The grid changes chord on the downbeat; you should change a hair before it.</p><p><b>The fourth bar of each loop has two chords.</b> In the verse, the <code>G</code> holds for about half the bar and then moves to <code>A</code> &mdash; sounding Ab walking up through Bb back to Cm. In the chorus, the <code>F#5</code> holds two beats and then moves to <code>A</code> on beat 3. This page names each bar by its downbeat chord, which is what the published chord charts do too, but if you want it to sound right, make that second change halfway through.</p><p>One more: the <b>last four bars of Verse 1 and Verse 3 are the instrumental riff</b>, not sung. That's why the cue slots stop before those sections end.</p>" },
+    { cls:"warn", h:"Where this came from",
+      body:"<p>The <b>chords, capo, section order and bar count</b> are read off the Songsterr transcription of the album version, one bar at a time from the Rhythm part (electric guitar, clean, capo 1). Nothing was copied as tab &mdash; only which chord is sounding in each bar. The five shapes that produces (<b>Bm A E G F#</b> at capo 1) match an independent published chord chart for the song, so that part agrees two ways.</p><p>The <b>tempo is 144 BPM</b>, from the transcription. Some charts quote 128; that can't be right &mdash; 129 bars of 4/4 at 128 would run past 4:00, while at 144 it comes to <b>3:35</b> against the track's 3:36. Good enough to call the tempo settled.</p><p>The <b>right hand is genuinely sourced here</b>, unlike most of this site. The Rhythm part is notated as unbroken eighth notes with a varying subset of the upstrokes ghosted, and the bridge as quarter notes &mdash; which is exactly the first two patterns. There is <b>no fingerpicking on this record</b>; the alternating-bass and arpeggio patterns are idiomatic alternatives for practising, not transcriptions of anything.</p><p>The <b>sung-line positions are the weak part.</b> No source transcribes the vocal, so the cue slots are a <b>modelled two-bar phrase grid</b> laid over the bars where the band is playing under a vocal &mdash; 39 slots in all. Expect to move some by hand with the <code>bar: line</code> syntax.</p>" }
+  ]
+}
+
 };
