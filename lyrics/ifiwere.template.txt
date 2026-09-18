@@ -4,8 +4,8 @@
 # Blank lines and lines starting with # are ignored.
 #
 # This song has 14 sung lines. They land on these bars:
-#   Verse 1        bars 21, 23, 27, 29, 31, 33, 35
-#   Verse 2        bars 37, 39, 43, 45, 47, 49, 51
+#   Verse 1 bars 21, 23, 27, 29, 31, 33, 35
+#   Verse 2 bars 37, 39, 43, 45, 47, 49, 51
 #
 # A line stays on screen until the next one starts, so you only need
 # the bars where a new line begins. To pin a line to an exact bar,

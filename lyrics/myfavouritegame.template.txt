@@ -3,27 +3,24 @@
 # Paste the sung lines below, ONE PER LINE, in the order they are sung.
 # Blank lines and lines starting with # are ignored.
 #
-# This song has 39 sung lines. They land on these bars:
-#   Verse 1    bars 14, 16, 18, 20
-#   Verse 2    bars 26, 28, 30, 32
-#   Chorus 1   bars 34, 36, 38, 40, 42, 44
-#   Verse 3    bars 55, 57, 59, 61
-#   Verse 4    bars 67, 69, 71, 73
-#   Chorus 2   bars 75, 77, 79, 81, 83, 85, 87, 89, 91, 93
-#   Bridge     bars 101, 103, 105, 107, 109, 111, 113
+# This song has 31 sung lines. They land on these bars:
+#   Verse 1  bars 14, 16, 18, 20
+#   Verse 2  bars 26, 28, 30, 32
+#   Chorus 1 bars 34, 38, 42, 44
+#   Verse 3  bars 55, 57, 59, 61
+#   Verse 4  bars 67, 69, 71, 73
+#   Chorus 2 bars 75, 79, 83, 87, 91, 93
+#   Bridge   bars 101, 105, 109, 113, 115
 #
 # A line stays on screen until the next one starts, so you only need
 # the bars where a new line begins. To pin a line to an exact bar,
-# prefix it with the bar number:   79: some line
+# prefix it with the bar number:   101: some line
 #
-# Heads up: unlike the other songs here, NO source transcribes this
-# vocal. These slots are a modelled two-bar phrase grid over the bars
-# where the band is playing under a vocal, so some of them will be in
-# the wrong place. Use the numbered form above to move them.
-#
-# Note also that the last four bars of Verse 1 (bars 22-25) and of
-# Verse 3 (bars 63-66) are the instrumental riff, so nothing is sung
-# there -- that is why the slots stop short of the section end.
+# These slots follow two published chord charts that print the vocal
+# against the chords: a line every two bars in the verses, one per
+# four-bar loop in the choruses and bridge. The last four bars of
+# Verse 1 and Verse 3 are the instrumental riff, so nothing is sung
+# there.
 #
 # IMPORTANT: save this as myfavouritegame.txt (drop the .template) --
 # that is the filename the page fetches. Serve it with a local server,
@@ -36,9 +33,7 @@
 
 
 
-
 # --- Verse 2 ---
-
 
 
 
@@ -50,18 +45,13 @@
 
 
 
-
-
-
 # --- Verse 3 ---
 
 
 
 
 
-
 # --- Verse 4 ---
-
 
 
 
@@ -75,9 +65,9 @@
 
 
 
-
-
-
-
-
 # --- Bridge ---
+
+
+
+
+

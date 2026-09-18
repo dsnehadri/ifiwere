@@ -3,18 +3,22 @@
 # Paste the sung lines below, ONE PER LINE, in the order they are sung.
 # Blank lines and lines starting with # are ignored.
 #
-# This song has 33 sung lines. They land on these bars:
-#   Verse 1        bars 9, 13, 17, 19, 21, 26
-#   Chorus 1       bars 33, 37, 41
-#   Verse 2        bars 45, 49, 53, 55, 57, 62
-#   Chorus 2       bars 69, 73, 77
-#   Bridge         bars 81, 82, 85, 86, 87, 91
-#   Verse 3        bars 95, 99, 103, 105, 107, 112
-#   Chorus 3       bars 119, 123, 127
+# This song has 38 sung lines. They land on these bars:
+#   Verse 1  bars 9, 13, 17, 19, 21, 26
+#   Chorus 1 bars 30, 34, 38, 42
+#   Verse 2  bars 46, 50, 54, 56, 58, 63
+#   Chorus 2 bars 67, 71, 75, 79
+#   Bridge   bars 83, 84, 85, 88, 89, 90, 91, 92
+#   Verse 3  bars 93, 97, 101, 103, 105, 110
+#   Chorus 3 bars 114, 118, 122, 126
 #
 # A line stays on screen until the next one starts, so you only need
 # the bars where a new line begins. To pin a line to an exact bar,
-# prefix it with the bar number:   37: some line
+# prefix it with the bar number:   114: some line
+#
+# Each chorus now has FOUR lines (the fourth ends on the G7 bar), and
+# the bridge has eight. Older files written for the three-line chorus
+# need those lines added, or everything after Chorus 1 drifts.
 #
 # IMPORTANT: save this as justlikeawoman.txt (drop the .template) --
 # that is the filename the page fetches. Serve it with a local server,
@@ -34,6 +38,7 @@
 
 
 
+
 # --- Verse 2 ---
 
 
@@ -47,7 +52,10 @@
 
 
 
+
 # --- Bridge ---
+
+
 
 
 
@@ -64,6 +72,7 @@
 
 
 # --- Chorus 3 ---
+
 
 
 

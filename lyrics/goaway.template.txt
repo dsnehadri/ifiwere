@@ -3,20 +3,25 @@
 # Paste the sung lines below, ONE PER LINE, in the order they are sung.
 # Blank lines and lines starting with # are ignored.
 #
-# This song has 40 sung lines. They land on these bars:
-#   Verse 1        bars 9, 12, 14, 16
-#   Pre-chorus 1   bars 18, 20, 21, 23
-#   Chorus 1       bars 25, 27, 29, 31
-#   Verse 2        bars 32, 35, 37, 39
-#   Pre-chorus 2   bars 41, 43, 44, 46
-#   Chorus 2       bars 48, 50, 52, 54
-#   Verse 3        bars 59, 62, 64, 66
-#   Pre-chorus 3   bars 68, 70, 71, 73
-#   Chorus (out)   bars 75, 77, 79, 81, 83, 85, 87, 89
+# This song has 41 sung lines. They land on these bars:
+#   Verse 1      bars 9, 11, 13, 15, 17
+#   Pre-chorus 1 bars 18, 19, 21, 23
+#   Verse 2      bars 25, 26, 27, 28, 29, 31, 33
+#   Pre-chorus 2 bars 34, 35, 37, 39
+#   Chorus 1     bars 41, 42, 44, 46
+#   Verse 3      bars 56, 58, 60, 62, 64
+#   Pre-chorus 3 bars 65, 66, 68, 70
+#   Chorus (out) bars 72, 73, 75, 77, 79, 81, 83, 85
 #
 # A line stays on screen until the next one starts, so you only need
 # the bars where a new line begins. To pin a line to an exact bar,
-# prefix it with the bar number:   37: some line
+# prefix it with the bar number:   72: some line
+#
+# Most lines start a bar early here: the words begin in the bar before
+# the chord printed over them, and the cue fires at the words. Verses
+# 1 and 3 have five lines (including a short one over the F#m at the
+# end); verse 2 has seven shorter ones. There is only one chorus before
+# the bridge.
 #
 # IMPORTANT: save this as goaway.txt (drop the .template) --
 # that is the filename the page fetches. Serve it with a local server,
@@ -29,13 +34,8 @@
 
 
 
+
 # --- Pre-chorus 1 ---
-
-
-
-
-
-# --- Chorus 1 ---
 
 
 
@@ -47,19 +47,23 @@
 
 
 
+
+
+
 # --- Pre-chorus 2 ---
 
 
 
 
 
-# --- Chorus 2 ---
+# --- Chorus 1 ---
 
 
 
 
 
 # --- Verse 3 ---
+
 
 
 
