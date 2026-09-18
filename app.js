@@ -13,6 +13,7 @@ const esc = t => String(t).replace(/[&<>"]/g, c =>
 let SONG, SONG_ID, EVENTS = [], TOTAL = 0, LINE_BARS = [];
 let pattern, cues = {}, editingCues = false;
 let lyricStatus = "";   // set when cues came from lyrics/<id>.txt
+let cuesFromFile = false;   // true while the shown cues came from that file
 
 /* ---- transport state ---- */
 let bpm = 100, capo = 0, soundMode = "both";
@@ -33,7 +34,16 @@ function initAudio(){
   ctx = new (window.AudioContext || window.webkitAudioContext)();
   master = ctx.createGain();
   master.gain.value = 0.85;
-  master.connect(ctx.destination);
+  /* Strums stack up to six strings with long tails; limit the sum
+     so overlapping chords don't hard-clip into buzz. */
+  const limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value = -10;
+  limiter.knee.value = 6;
+  limiter.ratio.value = 12;
+  limiter.attack.value = 0.003;
+  limiter.release.value = 0.25;
+  master.connect(limiter);
+  limiter.connect(ctx.destination);
 }
 
 function pluck(midi, when, vel){
@@ -83,9 +93,16 @@ function stepStrings(shape, st){
               : st.b === 1 ? shape.bass
               : st.s;
   if (shape.frets[primary] >= 0) out.push(primary);
-  else for (let d = 1; d < 6; d++){                 // nearest sounding string
-    if (shape.frets[primary + d] >= 0){ out.push(primary + d); break; }
-    if (shape.frets[primary - d] >= 0){ out.push(primary - d); break; }
+  else {
+    /* The target string is muted in this shape.  Keep the pattern's
+       contour by rank: the high e's job goes to the highest string the
+       shape sounds, the B's to the next one down, and so on.  (Taking the
+       nearest string instead sent every step of a three-string power
+       chord to the same note.) */
+    const sounding = [];
+    shape.frets.forEach((f, i) => { if (f >= 0) sounding.push(i); });
+    const fromTop = 5 - primary;
+    if (sounding.length) out.push(sounding[Math.max(0, sounding.length - 1 - fromTop)]);
   }
   if (st.pinch != null && shape.frets[st.pinch] >= 0) out.push(st.pinch);
   return out;
@@ -99,9 +116,11 @@ function scheduleStep(idx, step, when){
   const st = pattern.steps[step];
   if (step % stepsPerBeat() === 0) click(when, step === 0);
   const spread = st && st.strum ? 0.014 : 0.006;
-  stepStrings(shape, st).forEach((s, i) => {
+  const strs = stepStrings(shape, st);
+  const scale = st && st.strum && strs.length > 1 ? 1 / Math.sqrt(strs.length) : 1;
+  strs.forEach((s, i) => {
     const m = stringMidi(shape, s);
-    if (m != null) pluck(m, when + i * spread, st.f === "p" && i === 0 ? 1.0 : 0.7);
+    if (m != null) pluck(m, when + i * spread, (st.f === "p" && i === 0 ? 1.0 : 0.7) * scale);
   });
   drawQueue.push({ idx, step, when });
 }
@@ -122,6 +141,9 @@ function scheduler(){
   /* 0% tempo: hold position and keep the clock fresh, so raising the
      slider again resumes smoothly instead of firing a burst of catch-up. */
   if (bpm <= 0){ nextStepTime = ctx.currentTime + 0.05; return; }
+  /* A hidden tab throttles this timer to ~1s.  If we have fallen behind,
+     skip ahead rather than scheduling a burst of notes that are already due. */
+  if (nextStepTime < ctx.currentTime - 0.2) nextStepTime = ctx.currentTime + 0.05;
   while (nextStepTime < ctx.currentTime + 0.12){
     if (countIn > 0){
       const done = SONG.stepsPerBar - countIn;          // 0 .. stepsPerBar-1
@@ -144,8 +166,10 @@ function start(){
   if (ctx.state === "suspended") ctx.resume();
   playing = true;
   stepIndex = 0;
-  countIn = SONG.stepsPerBar;          // one full bar counted in
-  showCountIn(0);
+  /* One full bar counted in -- but not at 0% tempo, where nothing would ever
+     advance the count and the overlay would sit over the chord panel. */
+  countIn = bpm > 0 ? SONG.stepsPerBar : 0;
+  if (countIn) showCountIn(0);
   nextStepTime = ctx.currentTime + 0.08;
   schedTimer = setInterval(scheduler, 25);
   $("play").innerHTML = "&#10074;&#10074; Pause";
@@ -229,10 +253,12 @@ function diagram(name, size){
 }
 
 /* ============================================================
-   Cues -- typed by the user, stored in this browser only.
-   Only bar positions ship with the page; never any lyric text.
+   Cues -- either typed in the browser (saved to localStorage) or read
+   from lyrics/<song id>.txt.  File cues are never written back to
+   localStorage, so trying out a file can't wipe cues typed by hand.
    ============================================================ */
 const saveCues = () => {
+  if (cuesFromFile) return;
   try { localStorage.setItem(SONG.cueKey, JSON.stringify(cues)); } catch(_){}
 };
 
@@ -242,10 +268,10 @@ function cueFor(idx){
 }
 
 /* ------------------------------------------------------------
-   Optional local lyric file: lyrics/<song id>.txt
+   Optional lyric file: lyrics/<song id>.txt
 
-   Never committed (see .gitignore) and never shipped -- this only
-   reads whatever the user has put on their own machine.  Plain lines
+   These files are tracked and published with the site by the owner's
+   choice (see .gitignore).  Plain lines
    fill the sung-line slots in order; a "12: text" line pins that bar
    and wins over the sequential fill.
    ------------------------------------------------------------ */
@@ -277,9 +303,10 @@ function loadLyricFile(id){
       const n = Object.keys(parsed).length;
       if (!n) return;
       cues = parsed;
+      cuesFromFile = true;
       lyricStatus = '<span style="color:#0f0">&mdash; ' + n +
         ' cue' + (n === 1 ? "" : "s") + ' loaded from <b>lyrics/' + id +
-        '.txt</b>; edits here won\'t change that file</span>';
+        '.txt</b>; edits here are temporary and are not saved</span>';
       buildTimeline(); bindTimeline();
       lastDrawn = -1;
       paint(cursor, lastStep < 0 ? 0 : lastStep);
@@ -482,13 +509,14 @@ function loadSong(id){
     acc.concat((s.lines || []).map(o => s.start + o)), []);
 
   bpm = SONG.bpm;
-  capo = 0;
+  capo = SONG.capo || 0;
   cursor = 0; stepIndex = 0; loopSection = null;
   lastDrawn = -1; lastStep = -1; lastChordShown = null;
   pattern = SONG.patterns[0];
   editingCues = false;
 
   lyricStatus = "";
+  cuesFromFile = false;
   try { cues = JSON.parse(localStorage.getItem(SONG.cueKey) || "{}"); } catch(_){ cues = {}; }
 
   /* header */
@@ -503,6 +531,7 @@ function loadSong(id){
   $("tempoOut").textContent = SONG.bpm + " BPM · 100%";
   $("capo").innerHTML = Array.from({length:8}, (_, i) =>
     '<option value="' + i + '">' + (i === 0 ? "None" : i) + "</option>").join("");
+  $("capo").value = capo;
   $("pattern").innerHTML = SONG.patterns.map((p, i) =>
     '<option value="' + i + '">' + p.name + "</option>").join("");
   $("cueEdit").classList.remove("on");
