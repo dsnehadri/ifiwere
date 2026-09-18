@@ -1,6 +1,6 @@
 # Each line is pinned to the bar where it starts (bar: line).
-# Slots with no line here are listed as comments; a cue stays on
-# screen until the next one, so a missing line just holds the last.
+# Where the source starts a new line but this file does not, the
+# bar is listed as a comment and the line above stays on screen.
 
 # --- Verse 1 ---
 9: You know why I don't want to see you
@@ -17,12 +17,12 @@
 
 # --- Verse 2 ---
 25: And I wondered why
-# 26: (no line for this slot in this file)
+# 26: (no separate line here -- the line above stays on screen)
 27: Thinking you'd return
-# 28: (no line for this slot in this file)
+# 28: (no separate line here -- the line above stays on screen)
 29: I thought I would stay
 31: But after a while you hadn't returned
-# 33: (no line for this slot in this file)
+# 33: (no separate line here -- the line above stays on screen)
 
 # --- Pre-chorus 2 ---
 34: Then it didn't seem such a nice day
@@ -41,7 +41,7 @@
 58: But I don't want to see you today
 60: You said it was fun but I cannot smile
 62: I just wish that you would go away
-# 64: (no line for this slot in this file)
+# 64: (no separate line here -- the line above stays on screen)
 
 # --- Pre-chorus 3 ---
 65: I still remember sitting there

@@ -1,12 +1,12 @@
 # Each line is pinned to the bar where it starts (bar: line).
-# Slots with no line here are listed as comments; a cue stays on
-# screen until the next one, so a missing line just holds the last.
+# Where the source starts a new line but this file does not, the
+# bar is listed as a comment and the line above stays on screen.
 
 # --- Verse 1 ---
 9: Nobody feels any pain
 13: Tonight as I stand inside the rain
 17: Everybody knows that baby's got new clothes
-# 19: (no line for this slot in this file)
+# 19: (no separate line here -- the line above stays on screen)
 21: But lately I see her ribbons and her bows
 26: Have fallen from her curls
 
@@ -20,7 +20,7 @@
 46: Queen Mary, she's my friend
 50: Yes, I believe I'll go see her again
 54: Nobody has to guess that baby can't be blessed
-# 56: (no line for this slot in this file)
+# 56: (no separate line here -- the line above stays on screen)
 58: 'Til she finally sees that she's like all the rest
 63: With her fog, her amphetamine, and her pearls
 
@@ -32,10 +32,10 @@
 
 # --- Bridge ---
 83: It was raining from the first
-# 84: (no line for this slot in this file)
+# 84: (no separate line here -- the line above stays on screen)
 85: And I was dying there of thirst
 88: So I came in here
-# 89: (no line for this slot in this file)
+# 89: (no separate line here -- the line above stays on screen)
 90: And your long-time curse hurts
 91: But what's worse is this pain in here
 92: I can't stay in here
@@ -44,7 +44,7 @@
 93: Ain't it clear that I just can't fit
 97: Yes, I believe that it's time for us to quit
 101: But when we meet again, introduced as friends
-# 103: (no line for this slot in this file)
+# 103: (no separate line here -- the line above stays on screen)
 105: Please don't let on that you knew me when
 110: I was hungry and it was your world
 
