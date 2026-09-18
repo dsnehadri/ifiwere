@@ -1,33 +1,56 @@
-Nobody feels any pain
-Tonight as I stand inside the rain
-Everybody knows that baby's got new clothes
-But lately I see her ribbons and her bows
-Have fallen from her curls
-She takes just like a woman
-Yes, she does, she makes love just like a woman
-Yes, she does, and she aches just like a woman
-But she breaks just like a little girl
-Queen Mary, she's my friend
-Yes, I believe I'll go see her again
-Nobody has to guess that baby can't be blessed
-'Til she finally sees that she's like all the rest
-With her fog, her amphetamine, and her pearls
-She takes just like a woman
-Yes, she makes love just like a woman
-Yes, she does, and she aches just like a woman
-But she breaks just like a little girl
-It was raining from the first
-And I was dying there of thirst
-So I came in here
-And your long-time curse hurts
-But what's worse is this pain in here
-I can't stay in here
-Ain't it clear that I just can't fit
-Yes, I believe that it's time for us to quit
-But when we meet again, introduced as friends
-Please don't let on that you knew me when
-I was hungry and it was your world
-Ah, you fake just like a woman
-Yes, you do, you make love just like a woman
-Yes, you do, then you ache just like a woman
-But you break just like a little girl
+# Each line is pinned to the bar where it starts (bar: line).
+# Slots with no line here are listed as comments; a cue stays on
+# screen until the next one, so a missing line just holds the last.
+
+# --- Verse 1 ---
+9: Nobody feels any pain
+13: Tonight as I stand inside the rain
+17: Everybody knows that baby's got new clothes
+# 19: (no line for this slot in this file)
+21: But lately I see her ribbons and her bows
+26: Have fallen from her curls
+
+# --- Chorus 1 ---
+30: She takes just like a woman
+34: Yes, she does, she makes love just like a woman
+38: Yes, she does, and she aches just like a woman
+42: But she breaks just like a little girl
+
+# --- Verse 2 ---
+46: Queen Mary, she's my friend
+50: Yes, I believe I'll go see her again
+54: Nobody has to guess that baby can't be blessed
+# 56: (no line for this slot in this file)
+58: 'Til she finally sees that she's like all the rest
+63: With her fog, her amphetamine, and her pearls
+
+# --- Chorus 2 ---
+67: She takes just like a woman
+71: Yes, she makes love just like a woman
+75: Yes, she does, and she aches just like a woman
+79: But she breaks just like a little girl
+
+# --- Bridge ---
+83: It was raining from the first
+# 84: (no line for this slot in this file)
+85: And I was dying there of thirst
+88: So I came in here
+# 89: (no line for this slot in this file)
+90: And your long-time curse hurts
+91: But what's worse is this pain in here
+92: I can't stay in here
+
+# --- Verse 3 ---
+93: Ain't it clear that I just can't fit
+97: Yes, I believe that it's time for us to quit
+101: But when we meet again, introduced as friends
+# 103: (no line for this slot in this file)
+105: Please don't let on that you knew me when
+110: I was hungry and it was your world
+
+# --- Chorus 3 ---
+114: Ah, you fake just like a woman
+118: Yes, you do, you make love just like a woman
+122: Yes, you do, then you ache just like a woman
+126: But you break just like a little girl
+

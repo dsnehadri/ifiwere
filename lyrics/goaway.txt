@@ -1,37 +1,61 @@
-You know why I don't want to see you
-Remember when we went to the bay
-You had your car so we thought we'd go
-Since t was such a nice day
-I remember walking with you to the rocks
-Now knowing what you had in mind
-I closed my eyes to make a wish
-But opened them up to find
-You had slipped away
-And I wondered why
-Thinking you'd return
-I thought I would stay
-But after a while you hadn't returned
-Then it didn't seem such a nice day
-I remember sitting there on the rocks
-Not knowing you had gone away
-I was sitting there on my own
-Wiping the tears away
-Go away, I wish you would
-Go away, oh won't you please
-Go away, I wish you would go
-You've come to ask me how I am
-But I don't want to see you today
-You said it was fun but I cannot smile
-I just wish that you would go away
-I still remember sitting there
-On the rocks
-Not knowing you had gone away
-I was sitting there on my own
-Wiping the tears away
-Go away, I wish you would
-Go away, oh won't you please
-Go away, I wish you would
-Go away, oh won't you please
-Go away, I wish you would
-Go away, oh won't you please
-Go away, I wish you would go
+# Each line is pinned to the bar where it starts (bar: line).
+# Slots with no line here are listed as comments; a cue stays on
+# screen until the next one, so a missing line just holds the last.
+
+# --- Verse 1 ---
+9: You know why I don't want to see you
+11: Remember when we went to the bay
+13: You had your car so we thought we'd go
+15: Since t was such a nice day
+17: I remember walking with you to the rocks
+
+# --- Pre-chorus 1 ---
+18: Now knowing what you had in mind
+19: I closed my eyes to make a wish
+21: But opened them up to find
+23: You had slipped away
+
+# --- Verse 2 ---
+25: And I wondered why
+# 26: (no line for this slot in this file)
+27: Thinking you'd return
+# 28: (no line for this slot in this file)
+29: I thought I would stay
+31: But after a while you hadn't returned
+# 33: (no line for this slot in this file)
+
+# --- Pre-chorus 2 ---
+34: Then it didn't seem such a nice day
+35: I remember sitting there on the rocks
+37: Not knowing you had gone away
+39: I was sitting there on my own
+
+# --- Chorus 1 ---
+41: Wiping the tears away
+42: Go away, I wish you would
+44: Go away, oh won't you please
+46: Go away, I wish you would go
+
+# --- Verse 3 ---
+56: You've come to ask me how I am
+58: But I don't want to see you today
+60: You said it was fun but I cannot smile
+62: I just wish that you would go away
+# 64: (no line for this slot in this file)
+
+# --- Pre-chorus 3 ---
+65: I still remember sitting there
+66: On the rocks
+68: Not knowing you had gone away
+70: I was sitting there on my own
+
+# --- Chorus (out) ---
+72: Wiping the tears away
+73: Go away, I wish you would
+75: Go away, oh won't you please
+77: Go away, I wish you would
+79: Go away, oh won't you please
+81: Go away, I wish you would
+83: Go away, oh won't you please
+85: Go away, I wish you would go
+
