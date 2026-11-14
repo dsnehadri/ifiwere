@@ -1,0 +1,65 @@
+# This Charming Man - The Smiths
+#
+# Paste the sung lines below, ONE PER LINE, in the order they are sung.
+# Blank lines and lines starting with # are ignored.
+#
+# This song has 29 sung lines. They land on these bars:
+#   Verse 1    bars 5, 7, 9, 11, 12, 13, 14, 15
+#   Pre-chorus bars 16, 17, 19, 20
+#   Chorus 1   bars 22, 25, 27, 29, 33
+#   Verse 2    bars 36, 37, 39, 40, 42, 45
+#   Chorus 2   bars 49, 52, 54, 56, 60, 63
+#
+# A line stays on screen until the next one starts, so you only need
+# the bars where a new line begins. To pin a line to an exact bar,
+# prefix it with the bar number:   49: some line
+#
+# These slots follow the line starts in a published chord chart, which
+# lines chords up over the words only loosely, so treat single cues as
+# approximate. The verse lines are short, and the last few of Verse 1
+# come a bar apart. The pause after Chorus 1 is not in the bar count.
+#
+# IMPORTANT: save this as thischarmingman.txt (drop the .template) --
+# that is the filename the page fetches. Serve it with a local server,
+# not file://, because browsers block fetch() on file:// URLs:
+#     python3 -m http.server 8000
+
+# --- Verse 1 ---
+
+
+
+
+
+
+
+
+
+# --- Pre-chorus ---
+
+
+
+
+
+# --- Chorus 1 ---
+
+
+
+
+
+
+# --- Verse 2 ---
+
+
+
+
+
+
+
+# --- Chorus 2 ---
+
+
+
+
+
+
+

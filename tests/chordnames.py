@@ -24,6 +24,8 @@ QUALITIES = {
     "sus4": (0, 5, 7),        # no third at all
     "add4": (0, 4, 5, 7),
     "add9": (0, 2, 4, 7),
+    "9": (0, 4, 7, 10, 14),      # dominant ninth
+    "maj9": (0, 4, 7, 11, 14),
 }
 
 

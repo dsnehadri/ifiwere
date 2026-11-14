@@ -6,7 +6,7 @@ exactly which string each finger plucks on each beat.
 
 **Live: https://dsnehadri.github.io/ifiwere/**
 
-Four songs so far, picked from the selector at the top:
+Five songs so far, picked from the selector at the top:
 
 | Song | Artist | Key | Metre | Tempo |
 |---|---|---|---|---|
@@ -14,6 +14,7 @@ Four songs so far, picked from the selector at the top:
 | Just Like a Woman | Bob Dylan | E major (capo 4, C shapes) | 4/4 | 115 BPM |
 | Go Away | Strawberry Switchblade | B minor | 4/4 | 127 BPM |
 | My Favourite Game | The Cardigans | C minor (capo 1, Bm shapes) | 4/4 | 143 BPM |
+| This Charming Man | The Smiths | A major (standard tuning, no capo) | 4/4 | 104 BPM |
 
 ## Features
 
@@ -122,6 +123,23 @@ to ring instead. There is no fingerpicking on this record, so the arpeggio and a
 patterns are idiomatic alternatives. The one-chord-per-bar grid names each bar by its
 **downbeat** chord: the fourth bar of each loop really has two chords, several chorus bars sit
 over a held bass note, and nearly every chord is pushed an eighth early.
+
+**This Charming Man** — Marr recorded it tuned up a whole step to F# and fingered in G, so it
+sounds in A; this page plays it in A in **standard tuning** with no capo (the record itself is a
+fraction flat of A). The verse, pre-chorus, chorus and outro chords and the cue slots follow the
+Songsterr chord chart, which a guitaretab chart matches line for line, so count them as one
+source. The pre-chorus and chorus harmony is independently corroborated by a Hooktheory
+analysis in A major. That analysis and Wikipedia's published intro progression hear `D7` where
+the charts have `D`, and the page keeps `D`. The intro reads Wikipedia's progression
+(`A | Asus4 | A | E | Bm7 | D7 | C#m | E | …`) as two chords per bar, named by the first:
+`A A Bm7 C#m`, which is a model. The charts give `Bm7 D A A` instead. The published
+`Dmaj9` (`xx0220`) and `B9` (`x2122x`) fingerings each drop a chord tone, so fuller voicings are
+used. Marr's riff is pairs of notes on the B and high e strings (one tab, on two sites: it opens
+B10+e9 and reaches the B–E pair at the 12th fret a few notes in). The engine plays one chord per
+bar, so the riff is described rather than played. Tempo is **104 BPM** (three tempo databases
+give 103–104): 77 bars ≈ 2:57 against the single's 2:41, so the one-chart-chord-per-bar model
+runs long, probably in the choruses, and the pause after the first chorus is left out. **No
+source documents the right hand**; all four patterns are scaffolds.
 
 Treat all of these as practice scaffolds rather than authoritative transcriptions.
 

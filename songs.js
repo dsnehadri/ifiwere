@@ -270,4 +270,68 @@ myfavouritegame: {
   ]
 }
 
+,
+
+thischarmingman: {
+  title: "This Charming Man",
+  artist: "The Smiths",
+  album: "single, Rough Trade (1983); Peel session on Hatful of Hollow (1984)",
+  bpm: 104,
+  stepsPerBar: 8,
+  beatsPerBar: 4,
+  cueKey: "thischarmingman-cues-v1",
+  gridStrings: [[5,"e"],[4,"B"],[3,"G"],[2,"D"],[1,"A"],[0,"E"]],
+  facts: [
+    ["Key","A major"],
+    ["Capo","none"],
+    ["Metre","4/4 &mdash; one chord per bar"],
+    ["Tempo","104 BPM"],
+    ["Feel","bright eighth notes"],
+    ["Tuning","Standard (the record is tuned up)"]
+  ],
+  shapes: {
+    A:       { frets:[-1,0,2,2,2,0], fingers:[0,0,1,2,3,0], bass:1, alt:2, sub:"" },
+    Bm7:     { frets:[-1,2,4,2,3,2], fingers:[0,1,3,1,2,1], bass:1, alt:2, barre:{fret:2,from:1,to:5}, sub:"barre" },
+    "C#m":   { frets:[-1,4,6,6,5,4], fingers:[0,1,3,4,2,1], bass:1, alt:2, barre:{fret:4,from:1,to:5}, sub:"intro only" },
+    D:       { frets:[-1,-1,0,2,3,2], fingers:[0,0,0,1,3,2], bass:2, alt:3, sub:"" },
+    Dmaj9:   { frets:[-1,5,4,2,2,0], fingers:[0,4,3,1,1,0], bass:1, alt:2, barre:{fret:2,from:3,to:4}, sub:"chorus" },
+    E6:      { frets:[0,2,2,1,2,0], fingers:[0,2,3,1,4,0], bass:0, alt:1, sub:"E, plus a finger" },
+    "F#m7":  { frets:[2,4,2,2,2,2], fingers:[1,3,1,1,1,1], bass:0, alt:1, barre:{fret:2,from:0,to:5}, sub:"barre" },
+    B9:      { frets:[-1,2,1,2,2,2], fingers:[0,2,1,3,3,3], bass:1, alt:2, barre:{fret:2,from:3,to:5}, sub:"the outsider" }
+  },
+  sections: [
+    { name:"Intro",        chords:"A A Bm7 C#m" },
+    { name:"Verse 1",      chords:"A Bm7 D A Bm7 D A Bm7 D Bm7 D", lines:[0,2,4,6,7,8,9,10] },
+    { name:"Pre-chorus",   chords:"A Bm7 D A Bm7 D", lines:[0,1,3,4] },
+    { name:"Chorus 1",     chords:"Dmaj9 E6 F#m7 B9 Dmaj9 B9 F#m7 Dmaj9 E6 F#m7 B9 Dmaj9 E6 F#m7", lines:[0,3,5,7,11] },
+    { name:"Verse 2",      chords:"A Bm7 D A Bm7 D A Bm7 D A Bm7 D A", lines:[0,1,3,4,6,9] },
+    { name:"Chorus 2",     chords:"Dmaj9 E6 F#m7 B9 Dmaj9 B9 F#m7 Dmaj9 E6 F#m7 B9 Dmaj9 E6 F#m7 Dmaj9 E6 F#m7 B9 Dmaj9 B9 F#m7", lines:[0,3,5,7,11,14] },
+    { name:"Outro",        chords:"Dmaj9 E6 F#m7 B9 Dmaj9 B9 F#m7 F#m7" }
+  ],
+  patterns: [
+    { name:"Eighth-note strum",
+      steps:[{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"},{strum:"d"},{strum:"u"}],
+      desc:"<b>Down-up on every eighth</b>, light and bright. The easiest way to sit under the record while you learn the changes. <b>Not a transcription</b>: no source found documents a rhythm part, and Marr's famous guitar is a stack of picked lines, not strummed chords &mdash; see the riff note below." },
+    { name:"Thirds on top (idiomatic)",
+      steps:[{b:1,f:"p"},{s:4,f:"m",pinch:5},null,{s:4,f:"m",pinch:5},{b:2,f:"p"},{s:4,f:"m",pinch:5},null,{s:4,f:"m",pinch:5}],
+      desc:"Bass on beats 1 and 3, and the <b>B and high e strings plucked together</b> in between. On most of these shapes the top two strings are a <b>third</b> apart, so this gives a taste of the record's chiming two-note texture &mdash; Marr calls those runs in thirds &ldquo;highlife-sounding&rdquo;. It is <b>not the riff</b>, which moves its pair of notes on every eighth; it's a way to hear that colour while keeping one shape per bar." },
+    { name:"Alternating bass (idiomatic)",
+      steps:[{b:1,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"},{b:2,f:"p"},{s:3,f:"i"},{s:4,f:"m"},{s:5,f:"a"}],
+      desc:"Root on beat 1, a second bass note on beat 3, fingers rolling up the top three strings. <b>Not on the record</b> &mdash; for playing the song unplugged on your own. Watch the grid: the thumb moves between the low E, A and D strings depending on the chord." },
+    { name:"Sparse (learning)",
+      steps:[{b:1,f:"p"},null,{s:4,f:"m"},null,{b:2,f:"p"},null,{s:5,f:"a"},null],
+      desc:"Four notes a bar, on the beats. The chorus changes chord every bar through four shapes that share almost nothing &mdash; <b>Dmaj9 &rarr; E6 &rarr; F#m7 &rarr; B9</b> &mdash; so drill that run with this first." }
+  ],
+  notes: [
+    { cls:"good", h:"Standard tuning, no capo, same key as the record",
+      body:"<p>Johnny Marr didn't play this in standard tuning. In his words: &ldquo;I'm tuned up to F# and I finger it in G, so it comes out in A.&rdquo; Every string is raised a whole step, which is where the record's bright, tight chime comes from.</p><p>This page plays it <b>in A in standard tuning</b> instead. Same notes, no retuning, no capo &mdash; what you lose is a little of the sparkle, because slacker strings ring less.</p><p>Two consequences:</p><ul><li>The record actually sits a fraction <b>flat</b> of A (a lesson that measured it puts Marr's tuning between F and F#), so playing along you'll sound slightly sharp. Tune down a touch to sit right on it.</li><li>Tabs written for Marr's tuning show everything <b>two frets lower</b> than the positions below. Neither is wrong; they're for different tunings.</li></ul>" },
+    { h:"The riff, and the pair at the 12th fret",
+      body:"<p>Marr's part is <b>single notes and thirds</b> played high up the neck as a counter-melody, not strummed chords &mdash; with, by his count, about fifteen guitar tracks on the record. So the chord grid here is the harmony <i>under</i> the riff, not the riff itself.</p><p>In standard tuning, the published tab of the intro plays <b>pairs of notes on the B and high e strings</b>. It opens on <b>B10 + e9</b> (A and C#), drops to <b>B9 + e7</b> (G# and B) and back, touches <b>B10 + e10</b> (A and D), then slides up to <b>B14 + e14</b> and lands on <b>B12 + e12</b> &mdash; <b>B and E, both at the 12th fret</b>.</p><p>Those first pairs are the top of an <b>A</b> chord and an <b>E</b> chord, which is why the intro reads as A rocking against E. The engine plays one chord per bar, so it can't play these pairs note by note; learn the riff from the tab and use the grid to know what's underneath.</p>" },
+    { h:"Two chord worlds",
+      body:"<p>The verses and pre-chorus live on a three-chord loop: <code>A Bm7 D</code>. The intro starts on A too, then passes through <code>Bm7</code> and <code>C#m</code>.</p><p>The chorus moves somewhere richer: <code>Dmaj9 E6 F#m7 B9</code>, four extended chords in a row.</p><ul><li><b>Dmaj9</b> <code>x54220</code> &mdash; the published charts give <code>xx0220</code>, which leaves out the F#. Adding the A-string root and the D-string F# makes it the full chord. Drop back to <code>xx0220</code> if the stretch is too much.</li><li><b>E6</b> <code>022120</code> is an E chord with your pinky adding C# on the B string. One analysis calls the same chord C#m7 over E; it's the same four notes.</li><li><b>B9</b> <code>x21222</code> is the outsider: its D# isn't in the key of A. That's the lift at the end of each chorus line.</li></ul><p>On the record the chorus is played twice. The first time it stops dead for a <b>brief pause</b> before the second verse; the grid runs straight on, so leave that gap yourself.</p>" },
+    { cls:"warn", h:"Where this came from",
+      body:"<p>The <b>verse, pre-chorus, chorus and outro chords</b> and the <b>cue slots</b> follow the Songsterr chord chart; a guitaretab chart matches it line for line, so they're probably one source, not two. The <b>harmony of the pre-chorus and chorus</b> is independently corroborated by a Hooktheory analysis in A major. That analysis hears <code>D7</code> where the charts have <code>D</code>, and so does the published intro progression; this page keeps the charts' plain D.</p><p>The <b>intro</b> is from the published progression on Wikipedia: <code>A | Asus4 | A | E | Bm7 | D7 | C#m | E | &hellip;</code>, which runs on past the point where the singing starts. The charts instead give <code>Bm7 D A A</code>. This page reads Wikipedia's chords as two per bar and names each bar by its first, giving <code>A A Bm7 C#m</code>. That pairing is a model, not a transcription.</p><p>The <b>riff positions</b> come from a single tab of the album version, carried by two tab sites. The tab hasn't been checked against the audio.</p><p>The <b>tempo is 104 BPM</b> (103&ndash;104 across three tempo databases; one music-theory site counts the same pulse double, at 209). The <b>bar counts are a model</b>: one chart chord per bar, with the pause after Chorus 1 left out. That's 77 bars, about 2:57, against the single's 2:41, so the chart's chords probably move faster than once a bar in places, most likely in the choruses.</p><p><b>No source documents the right hand.</b> All four patterns are scaffolds for practising the changes.</p>" }
+  ]
+}
+
 };
