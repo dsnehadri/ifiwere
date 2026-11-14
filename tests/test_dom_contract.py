@@ -103,6 +103,7 @@ class ClassContractTests(unittest.TestCase):
         "done": [".chip.done"],
         "hit": [".pg-cell.hit"],
         "thumb": [".pg-cell.hit.thumb"],
+        "slid": [".pg-cell.hit.slid"],      # a riff note reached by sliding
     }
 
     def test_the_stylesheet_was_found(self):

@@ -27,7 +27,8 @@ Five songs so far, picked from the selector at the top:
   plucks what. The thumb's string is re-marked per chord, so alternating-bass patterns show
   the correct bass note for the chord you're actually on.
 - **Note-for-note riffs** — a song can carry its lead part as exact string-and-fret notes,
-  sixteen steps to the bar; the grid then shows the fret of every note. A bar can also hold
+  sixteen steps to the bar, including slides (a note reached without plucking glides from the
+  one before it); the grid then shows the fret of every note. A bar can also hold
   two chords, one per half (`Cadd9,Bm/D` in `songs.js`).
 - **Multiple right-hand patterns per song**, plus a sparse "learning" pattern for locking
   the changes in before adding the full roll.
@@ -131,8 +132,10 @@ over a held bass note, and nearly every chord is pushed an eighth early.
 single. Marr tuned up to F# and fingered in G, so the record sounds in A; a **capo at 2** in
 standard tuning does the same, so every fret on the page is Marr's own, counted from the capo.
 The default pattern is **his lead part, note for note**, converted from the transcription's Lead
-Guitar track. It opens on the G and B strings at the 12th fret. Slides and hammer-ons play as
-plain notes. The chords come from the Rhythm and Acoustic parts and the transcriber's chord
+Guitar track. It opens on the G and B strings at the 12th fret. Its slides are kept as the
+transcription marks them: five notes reached by sliding rather than plucking, forty slid into
+from a couple of frets below, and the chords that slide away at the two stops. It marks no
+hammer-ons or pull-offs. The chords come from the Rhythm and Acoustic parts and the transcriber's chord
 labels. The chorus changes every half bar, hence the split bars. One beat-4 change in the verse
 loop (`Em7/B`) is shown as the bar's `C`, and the first two intro bars, which are the riff alone,
 are named `G`. The sections and the 70 bars are the transcription's markers, and 70 bars at its

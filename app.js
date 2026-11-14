@@ -48,15 +48,19 @@ function initAudio(){
   limiter.connect(ctx.destination);
 }
 
-/* Returns the note's output gain, so a riff can damp it early.
+const midiHz = midi => 440 * Math.pow(2, (midi - 69) / 12);
+
+/* Returns the note as a voice -- its output gain, its oscillators and its
+   pitch -- so a riff can damp it early or slide it to another fret.
    `short` scales every decay down -- a dead note is a click, not a tone. */
 function pluck(midi, when, vel, short){
   if (soundMode === "off" || soundMode === "click") return null;
-  const f = 440 * Math.pow(2, (midi - 69) / 12);
+  const f = midiHz(midi);
   const k = short || 1;
   const out = ctx.createGain();
   out.gain.setValueAtTime(0.16, when);
   out.connect(master);
+  const oscs = [];
   [[1,1.0,2.6],[2,0.42,1.5],[3,0.20,0.9],[4,0.10,0.6],[5,0.05,0.4]].forEach(([mult,amp,dec]) => {
     const o = ctx.createOscillator(), g = ctx.createGain();
     o.type = "triangle";
@@ -66,8 +70,20 @@ function pluck(midi, when, vel, short){
     g.gain.exponentialRampToValueAtTime(0.0001, when + dec * k);
     o.connect(g); g.connect(out);
     o.start(when); o.stop(when + dec * k + 0.05);
+    oscs.push([o, mult]);
   });
-  return out;
+  return { out, oscs, f };
+}
+
+/* Slide a sounding voice to another pitch, the way a finger sliding along
+   the string does: no new attack, just the pitch moving. */
+function glide(v, midi, from, dur){
+  const f = midiHz(midi);
+  v.oscs.forEach(([o, mult]) => {
+    o.frequency.setValueAtTime(v.f * mult, from);
+    o.frequency.exponentialRampToValueAtTime(f * mult, from + dur);
+  });
+  v.f = f;
 }
 
 /* ------------------------------------------------------------
@@ -77,25 +93,39 @@ function pluck(midi, when, vel, short){
      "."        nothing new -- whatever is sounding keeps sounding
      "r"        a rest -- everything stops
      "G12+B12"  notes struck together: string letter (E A D G B e, low
-                to high) and fret, relative to the capo.  A trailing
-                "x" is a dead (muted) note, "~" lets the note ring on.
+                to high) and fret, relative to the capo.  Letters after
+                the fret, in any order:
+                  x  a dead (muted) note
+                  ~  let it ring on
+                  s  slid to: not plucked -- the note already sounding
+                     on that string slides up or down to this fret
+                  i  slide in: plucked a little below and slid up into
+                  o  slide out: the note sounding on that string slides
+                     down the neck as it dies; nothing is plucked
    A section's `riff` names the bar to play under each of its bars.
    ------------------------------------------------------------ */
 const RIFF_STRINGS = "EADGBe";
+const SLIDE_SECS = 0.05;      // how long a slide's travel takes
+const SLIDE_IN_FRETS = 2;     // where a slide-in starts, below its note
+const SLIDE_OUT_FRETS = 7;    // how far a slide-out falls
 
 function parseRiffBar(text){
   return text.trim().split(/\s+/).map(tok => {
     if (tok === ".") return null;
     if (tok === "r") return "r";
     return tok.split("+").map(n => {
-      const m = n.match(/^([EADGBe])(\d+)([x~]?)$/);
+      const m = n.match(/^([EADGBe])(\d+)([x~sio]*)$/);
+      const has = c => m[3].indexOf(c) >= 0;
       return { str: RIFF_STRINGS.indexOf(m[1]), fret: +m[2],
-               dead: m[3] === "x", ring: m[3] === "~" };
+               dead: has("x"), ring: has("~"),
+               slid: has("s"), slideIn: has("i"), slideOut: has("o") };
     });
   });
 }
 
+/* A voice already fading out of a slide-out is left to finish. */
 function damp(v, when){
+  if (v.fading) return;
   v.out.gain.cancelScheduledValues(when);
   v.out.gain.setValueAtTime(0.16, when);
   v.out.gain.setTargetAtTime(0, when, 0.012);
@@ -106,23 +136,60 @@ function silenceRiff(){
   ringing = [];
 }
 
+const riffMidi = n => OPEN_MIDI[n.str] + n.fret + capo;
+
 /* A new note stops what came before it, as lifting a finger would:
    every note not marked to ring, and anything on the same string.
-   A rest stops everything. */
+   A rest stops everything.  A slid-to or slid-out note instead takes
+   over the voice already sounding on its string. */
 function playRiff(idx, step, when){
   const bar = RIFFS[EVENTS[idx].riff];
   const tok = bar ? bar[step] : null;
   if (!tok) return;
   const notes = tok === "r" ? [] : tok;
-  ringing = ringing.filter(v => {
-    if (when - v.start > 3) return false;                    // long since faded
-    if (tok === "r" || !v.ring || notes.some(n => n.str === v.str)){ damp(v, when); return false; }
-    return true;
+
+  const moved = [];
+  notes.forEach(n => {
+    if (!n.slid && !n.slideOut) return;
+    const i = ringing.findIndex(v => v.str === n.str && !v.fading);
+    moved.push([n, i >= 0 ? ringing.splice(i, 1)[0] : null]);
   });
+
+  /* A slide-out on its own is the tail of a note, not a new one. */
+  if (tok === "r" || notes.some(n => !n.slideOut)){
+    ringing = ringing.filter(v => {
+      if (when - v.start > 3) return false;                  // long since faded
+      if (tok === "r" || !v.ring || notes.some(n => n.str === v.str)){ damp(v, when); return false; }
+      return true;
+    });
+  }
+
+  moved.forEach(([n, v]) => {
+    if (n.slideOut){
+      if (!v) return;
+      glide(v, riffMidi(n) - SLIDE_OUT_FRETS, when, 0.3);
+      v.out.gain.setTargetAtTime(0, when, 0.08);
+      v.fading = true;
+      ringing.push(v);
+    } else if (v){
+      glide(v, riffMidi(n), when, SLIDE_SECS);
+      v.ring = n.ring;
+      ringing.push(v);
+    }
+  });
+
   notes.forEach((n, i) => {
-    const out = pluck(OPEN_MIDI[n.str] + n.fret + capo, when + i * 0.006,
-                      n.dead ? 0.45 : 0.8, n.dead ? 0.04 : 1);
-    if (out && !n.dead) ringing.push({ str:n.str, ring:n.ring, out, start:when });
+    if (n.slideOut) return;
+    if (n.slid && moved.some(([m, v]) => m === n && v)) return;
+    /* A slid-to note with nothing to slide from (after a seek, say) is
+       played softly rather than dropped. */
+    const t = when + i * 0.006, target = riffMidi(n);
+    const v = pluck(n.slideIn ? target - SLIDE_IN_FRETS : target, t,
+                    n.dead ? 0.45 : n.slid ? 0.5 : 0.8, n.dead ? 0.04 : 1);
+    if (!v || n.dead) return;
+    if (n.slideIn) glide(v, target, t, SLIDE_SECS);
+    v.str = n.str; v.ring = n.ring; v.start = when;
+    ringing.push(v);
   });
 }
 
@@ -471,7 +538,10 @@ function markPattern(idx, step){
         const cell = document.querySelector('.pg-cell[data-step="' + si + '"][data-str="' + n.str + '"]');
         if (!cell) return;
         cell.classList.add("hit");
-        cell.textContent = n.dead ? "x" : n.fret;
+        /* "/12" is slid to, not plucked; "↗4" slides in; "7↘" slides away. */
+        cell.textContent = n.dead ? "x" : n.slid ? "/" + n.fret
+                         : n.slideIn ? "↗" + n.fret : n.slideOut ? n.fret + "↘" : n.fret;
+        if (n.slid || n.slideOut) cell.classList.add("slid");
       });
     });
     return;

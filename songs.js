@@ -304,22 +304,22 @@ thischarmingman: {
      from the capo. See parseRiffBar() in app.js for the notation. */
   riffs: {
     i1:  "r . G12+B12 G12+B12 r G11+B10 . G11+B10 r G12+B13 . D12x G12+B12 . G11+B10 .",
-    i2:  "G11+B10 G12+B12 G12 e0 r e10 . e10~ . G7~ . B7~ e7~ . B10 .",
+    i2:  "G11+B10 G12s+B12s G12 e0 r e10 . e10~ . G7~ . B7~ e7~ . B10 .",
     i3:  "G9 . G9~ B8~ . G9~ . e7 r e0~ . G9~ B8 . B10 .",
-    i4:  "G9 . G9~ B8~ . G9~ . e0~ . G11~+B10~ . G11~ e0~ . G11+B10 .",
-    i5:  "G11 G12 . G12+B12 r G11+B10 . G11+B10 r G12+B13 . D12x G12+B12 . G11+B10 .",
-    i6:  "G11+B10 G12~+B12~ G12 e0 r e10 . e10 r . . . r . D12x+G12x+B12x .",
-    v1:  "G4~ . B3~ . G0 . G0~ B3~ r B3~ . G0~ e0~ . B3 .",
-    v2:  "G4~ . B3~ . G0 . G0 B7 r B7~ G7~ . e0~ . B7 .",
+    i4:  "G9 . G9~ B8~ . G9~ . e0~ . G11i~+B10i~ . G11~ e0~ . G11+B10 .",
+    i5:  "G11 G12s . G12+B12 r G11+B10 . G11+B10 r G12+B13 . D12x G12+B12 . G11+B10 .",
+    i6:  "G11+B10 G12s~+B12s~ G12 e0 r e10 . e10 r . . . r . D12x+G12x+B12x .",
+    v1:  "G4i~ . B3~ . G0 . G0~ B3~ r B3~ . G0~ e0~ . B3 .",
+    v2:  "G4i~ . B3~ . G0 . G0 B7 r B7~ G7~ . e0~ . B7 .",
     c1:  "D10~ . G9~ . B8~ . G9 . D9~ . G7~ . B7~ . G7 .",
     c2:  "D14~ . G12~ . B12 . B0 . A12~ . D11~ . G12~ . B12 .",
     c3:  "D10~ . G9~ . B8~ . e10 . A12~ . D11~ . G12~ . e12 .",
     c4:  "E0~ . A7~+D9~+G7~+B8~ . A7~+D7~+G7~+B7~ A7+D7+G7+B7 A7x+D7x+G7x+B7x A7+D9+G7+B8 r A7+D9+G7+B8 r . A3+D5+G4+B5 . A5+D7+G6+B7 .",
-    c5:  "E0~ . A7~+D9~+G7~+B8~ A7~+D9~+G7~+B8~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7~+D9~+G7~+B8~ . r . . r . . .",
+    c5:  "E0~ . A7~+D9~+G7~+B8~ A7~+D9~+G7~+B8~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7~+D9~+G7~+B8~ A7o+D9o+G7o+B8o r . . r . . .",
     c6:  "E0~ . A7~+D9~+G7~+B8~ A7~+D9~+G7~+B8~ A7~+D7~+G7~+B7~ A7+D7+G7+B7 A7x+D7x+G7x+B7x A7+D9+G7+B8 r A7+D9+G7+B8 r . A3+D5+G4+B5 . A5+D7+G6+B7 .",
     c7:  "E0~ . A7~+D9~+G7~+B8~ A7~+D9~+G7~+B8~ A7+D7+G7+B7 A7x+D7x+G7x+B7x A7x+D7x+G7x+B7x A7+D9+G7+B8 r A7+D9+G7+B8 r . A3+D5+G4+B5 . A5+D7+G6+B7 .",
     c8:  "E0~ . A7~+D9~+G7~+B8~ A7~+D9~+G7~+B8~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7~+D7~+G7~+B7~ A7+D9+G7+B8 r A7+D9+G7+B8 . A3x+D5x+G4x+B5x A3+D5+G4+B5 . A5+D7+G6+B7 .",
-    c9:  "r . A7+D9+G7+B8 A7+D9+G7+B8 A7+D7+G7+B7 A7+D7+G7+B7 A7+D7+G7+B7 A7+D9+G7+B8 . r . . r . . ."
+    c9:  "r . A7+D9+G7+B8 A7+D9+G7+B8 A7+D7+G7+B7 A7+D7+G7+B7 A7+D7+G7+B7 A7+D9+G7+B8 A7o+D9o+G7o+B8o r . . r . . ."
   },
   sections: [
     { name:"Intro", chords:"G G A7sus2 C G G",
@@ -337,7 +337,7 @@ thischarmingman: {
   ],
   patterns: [
     { name:"Marr's riff (per Songsterr)", riff:true,
-      desc:"<b>The lead guitar, note for note</b>, from the Lead Guitar part of the Songsterr transcription. Each number in the grid is a fret on that string, counted from the capo; <b>x</b> is a dead, muted note. The riff moves on sixteenth notes, so there are sixteen steps to the bar. Two bars of the verse loop sit high on the neck and two drop down to open strings, and the chorus walks down from the D string before a strummed chord at the 7th fret closes each four bars. Slides and hammer-ons play here as plain notes." },
+      desc:"<b>The lead guitar, note for note</b>, from the Lead Guitar part of the Songsterr transcription. Each number in the grid is a fret on that string, counted from the capo; <b>x</b> is a dead, muted note. The riff moves on sixteenth notes, so there are sixteen steps to the bar. Two bars of the verse loop sit high on the neck and two drop down to open strings, and the chorus walks down from the D string before a strummed chord at the 7th fret closes each four bars.<br><b>Slides</b>, as the transcription marks them: <b>/12</b> (dashed) means don't pluck &mdash; slide the finger already on that string up to the 12th fret and let the slide sound the note, as in intro bars 2, 5 and 6. <b>&#8599;4</b> means pluck a fret or two below and slide up into the 4th, as at the top of every open-string bar of the verse. <b>7&#8600;</b> (dashed) means slide the held chord down the neck as it dies, at the stop after each chorus." },
     { name:"Acoustic: bass and strum (per Songsterr)",
       steps:[{b:1,f:"p"},null,{strum:"d"},null,{b:1,f:"p"},null,{strum:"d"},null,{b:1,f:"p"},null,{strum:"d"},null,{b:1,f:"p"},null,{strum:"d"},null],
       desc:"<b>Bass note on the beat, chord on the &ldquo;and&rdquo;</b>. This is what the transcription's acoustic guitar plays through the verses, and a good way to play along without the riff. In the chorus that part just strikes each chord as it arrives &mdash; the next pattern." },
