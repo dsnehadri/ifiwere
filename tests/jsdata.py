@@ -154,6 +154,16 @@ def bars(song):
     return out
 
 
+def bar_chords(bar):
+    """'Cadd9,Bm/D' -> ['Cadd9', 'Bm/D']: a bar may hold two chords, one per half."""
+    return bar.split(",")
+
+
+def chord_names(song):
+    """Every chord name the song plays, in order, both halves of split bars included."""
+    return [chord for bar in bars(song) for chord in bar_chords(bar)]
+
+
 def section_chords(section):
     """A section's chords as a list, the way loadSong() splits the string."""
     chords = section["chords"]

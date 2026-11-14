@@ -14,7 +14,7 @@ Five songs so far, picked from the selector at the top:
 | Just Like a Woman | Bob Dylan | E major (capo 4, C shapes) | 4/4 | 115 BPM |
 | Go Away | Strawberry Switchblade | B minor | 4/4 | 127 BPM |
 | My Favourite Game | The Cardigans | C minor (capo 1, Bm shapes) | 4/4 | 143 BPM |
-| This Charming Man | The Smiths | A major (standard tuning, no capo) | 4/4 | 104 BPM |
+| This Charming Man | The Smiths | A major (capo 2, Marr's G shapes) | 4/4 | 104 BPM |
 
 ## Features
 
@@ -26,6 +26,9 @@ Five songs so far, picked from the selector at the top:
 - **Animated picking grid** — string rows against the beats of the bar, showing which finger
   plucks what. The thumb's string is re-marked per chord, so alternating-bass patterns show
   the correct bass note for the chord you're actually on.
+- **Note-for-note riffs** — a song can carry its lead part as exact string-and-fret notes,
+  sixteen steps to the bar; the grid then shows the fret of every note. A bar can also hold
+  two chords, one per half (`Cadd9,Bm/D` in `songs.js`).
 - **Multiple right-hand patterns per song**, plus a sparse "learning" pattern for locking
   the changes in before adding the full roll.
 - **Editable cues with built-in alignment** — see below.
@@ -124,22 +127,20 @@ patterns are idiomatic alternatives. The one-chord-per-bar grid names each bar b
 **downbeat** chord: the fourth bar of each loop really has two chords, several chorus bars sit
 over a held bass note, and nearly every chord is pushed an eighth early.
 
-**This Charming Man** — Marr recorded it tuned up a whole step to F# and fingered in G, so it
-sounds in A; this page plays it in A in **standard tuning** with no capo (the record itself is a
-fraction flat of A). The verse, pre-chorus, chorus and outro chords and the cue slots follow the
-Songsterr chord chart, which a guitaretab chart matches line for line, so count them as one
-source. The pre-chorus and chorus harmony is independently corroborated by a Hooktheory
-analysis in A major. That analysis and Wikipedia's published intro progression hear `D7` where
-the charts have `D`, and the page keeps `D`. The intro reads Wikipedia's progression
-(`A | Asus4 | A | E | Bm7 | D7 | C#m | E | …`) as two chords per bar, named by the first:
-`A A Bm7 C#m`, which is a model. The charts give `Bm7 D A A` instead. The published
-`Dmaj9` (`xx0220`) and `B9` (`x2122x`) fingerings each drop a chord tone, so fuller voicings are
-used. Marr's riff is pairs of notes on the B and high e strings (one tab, on two sites: it opens
-B10+e9 and reaches the B–E pair at the 12th fret a few notes in). The engine plays one chord per
-bar, so the riff is described rather than played. Tempo is **104 BPM** (three tempo databases
-give 103–104): 77 bars ≈ 2:57 against the single's 2:41, so the one-chart-chord-per-bar model
-runs long, probably in the choruses, and the pause after the first chorus is left out. **No
-source documents the right hand**; all four patterns are scaffolds.
+**This Charming Man** — everything comes from one source, the Songsterr transcription of the
+single. Marr tuned up to F# and fingered in G, so the record sounds in A; a **capo at 2** in
+standard tuning does the same, so every fret on the page is Marr's own, counted from the capo.
+The default pattern is **his lead part, note for note**, converted from the transcription's Lead
+Guitar track. It opens on the G and B strings at the 12th fret. Slides and hammer-ons play as
+plain notes. The chords come from the Rhythm and Acoustic parts and the transcriber's chord
+labels. The chorus changes every half bar, hence the split bars. One beat-4 change in the verse
+loop (`Em7/B`) is shown as the bar's `C`, and the first two intro bars, which are the riff alone,
+are named `G`. The sections and the 70 bars are the transcription's markers, and 70 bars at its
+104 BPM come to 2:41, the single's length. The 32 cue slots are timed from its vocal part (a new
+slot wherever singing resumes after a beat or more of rest); its words were not used. One
+transcriber's reading, not checked against the audio here. An earlier version of this entry
+followed published chord charts and a riff tab instead, and got the bar count and the riff's
+opening wrong.
 
 Treat all of these as practice scaffolds rather than authoritative transcriptions.
 
@@ -148,7 +149,7 @@ Treat all of these as practice scaffolds rather than authoritative transcription
 | File | What's in it |
 |---|---|
 | `index.html` | Page shell and stylesheet |
-| `songs.js` | All song data — shapes, sections, patterns, notes, alignment maps |
+| `songs.js` | All song data — shapes, sections, patterns, riffs, notes, alignment maps |
 | `app.js` | The engine; knows nothing about any particular song |
 | `lyrics/` | Per-song cue templates, plus any filled-in `<song>.txt` files (tracked and published) |
 

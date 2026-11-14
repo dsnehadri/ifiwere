@@ -3,26 +3,31 @@
 # Paste the sung lines below, ONE PER LINE, in the order they are sung.
 # Blank lines and lines starting with # are ignored.
 #
-# This song has 29 sung lines. They land on these bars:
-#   Verse 1    bars 5, 7, 9, 11, 12, 13, 14, 15
-#   Pre-chorus bars 16, 17, 19, 20
-#   Chorus 1   bars 22, 25, 27, 29, 33
-#   Verse 2    bars 36, 37, 39, 40, 42, 45
-#   Chorus 2   bars 49, 52, 54, 56, 60, 63
+# This song has 32 sung lines. They land on these bars:
+#   Intro     bars 6
+#   Verse 1   bars 7, 9, 12, 14, 15, 16, 20, 21, 24, 28
+#   Chorus 1  bars 29, 30, 32, 34, 37
+#   Verse 2   bars 38, 41, 45, 47, 48, 49, 51, 52, 53
+#   Chorus 2  bars 54, 55, 57, 59, 61, 63, 64
 #
 # A line stays on screen until the next one starts, so you only need
 # the bars where a new line begins. To pin a line to an exact bar,
-# prefix it with the bar number:   49: some line
+# prefix it with the bar number:   29: some line
 #
-# These slots follow the line starts in a published chord chart, which
-# lines chords up over the words only loosely, so treat single cues as
-# approximate. The verse lines are short, and the last few of Verse 1
-# come a bar apart. The pause after Chorus 1 is not in the bar count.
+# A slot here is a sung phrase: it starts wherever the singing comes
+# back after a beat or more of rest, timed from the vocal part of the
+# Songsterr transcription (its words were not used). If your lines are
+# split differently, pin them with bar numbers. The first line starts
+# as a pickup in the last bar of the intro.
 #
 # IMPORTANT: save this as thischarmingman.txt (drop the .template) --
 # that is the filename the page fetches. Serve it with a local server,
 # not file://, because browsers block fetch() on file:// URLs:
 #     python3 -m http.server 8000
+
+# --- Intro ---
+
+
 
 # --- Verse 1 ---
 
@@ -34,13 +39,11 @@
 
 
 
-# --- Pre-chorus ---
-
-
 
 
 
 # --- Chorus 1 ---
+
 
 
 
@@ -55,7 +58,12 @@
 
 
 
+
+
+
+
 # --- Chorus 2 ---
+
 
 
 

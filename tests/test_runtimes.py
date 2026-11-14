@@ -23,7 +23,7 @@ RUNTIME_CLAIMS = {
     "justlikeawoman": (140, "4:52", "That comes to 140 bars, about 4:52"),
     "goaway": (95, "2:59", "That's 95 bars, about 2:59"),
     "myfavouritegame": (129, "3:36", "the 129 bars come to 3:36"),
-    "thischarmingman": (77, "2:57", "That's 77 bars, about 2:57"),
+    "thischarmingman": (70, "2:41", "the 70 bars come to 2:41"),
 }
 
 #: Other countable claims the notes make in prose.

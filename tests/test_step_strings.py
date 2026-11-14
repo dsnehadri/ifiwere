@@ -168,9 +168,9 @@ class RealSongTests(unittest.TestCase):
 
     def _cases(self):
         for song_id, song in SONGS.items():
-            chords = sorted(set(jsdata.bars(song)))
+            chords = sorted(set(jsdata.chord_names(song)))
             for pattern in song["patterns"]:
-                for index, step in enumerate(pattern["steps"]):
+                for index, step in enumerate(pattern.get("steps", [])):
                     for chord in chords:
                         yield song_id, pattern["name"], index, step, chord, song["shapes"][chord]
 
@@ -194,9 +194,9 @@ class RealSongTests(unittest.TestCase):
         # miss, so an off-grid string would be heard but never drawn.
         for song_id, song in SONGS.items():
             grid = {index for index, _ in song["gridStrings"]}
-            chords = sorted(set(jsdata.bars(song)))
+            chords = sorted(set(jsdata.chord_names(song)))
             for pattern in song["patterns"]:
-                for index, step in enumerate(pattern["steps"]):
+                for index, step in enumerate(pattern.get("steps", [])):
                     for chord in chords:
                         for string in step_strings(song["shapes"][chord], step):
                             with self.subTest(song=song_id, pattern=pattern["name"],
@@ -239,7 +239,7 @@ class RealSongTests(unittest.TestCase):
             for chord, shape in song["shapes"].items():
                 for pattern in song["patterns"]:
                     heights = {}
-                    for step in pattern["steps"]:
+                    for step in pattern.get("steps", []):
                         if step is None or step.get("f") not in order:
                             continue
                         if step.get("b") or step.get("s") is None:

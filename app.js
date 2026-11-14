@@ -11,6 +11,8 @@ const esc = t => String(t).replace(/[&<>"]/g, c =>
 
 /* ---- per-song state, all rebuilt by loadSong() ---- */
 let SONG, SONG_ID, EVENTS = [], TOTAL = 0, LINE_BARS = [];
+let RIFFS = {};          // riff bar name -> parsed steps, see parseRiffBar()
+let ringing = [];        // riff notes still sounding: { str, ring, out, start }
 let pattern, cues = {}, editingCues = false;
 let lyricStatus = "";   // set when cues came from lyrics/<id>.txt
 let cuesFromFile = false;   // true while the shown cues came from that file
@@ -46,9 +48,12 @@ function initAudio(){
   limiter.connect(ctx.destination);
 }
 
-function pluck(midi, when, vel){
-  if (soundMode === "off" || soundMode === "click") return;
+/* Returns the note's output gain, so a riff can damp it early.
+   `short` scales every decay down -- a dead note is a click, not a tone. */
+function pluck(midi, when, vel, short){
+  if (soundMode === "off" || soundMode === "click") return null;
   const f = 440 * Math.pow(2, (midi - 69) / 12);
+  const k = short || 1;
   const out = ctx.createGain();
   out.gain.setValueAtTime(0.16, when);
   out.connect(master);
@@ -58,11 +63,74 @@ function pluck(midi, when, vel){
     o.frequency.value = f * mult;
     g.gain.setValueAtTime(0, when);
     g.gain.linearRampToValueAtTime(amp * vel, when + 0.004);
-    g.gain.exponentialRampToValueAtTime(0.0001, when + dec);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dec * k);
     o.connect(g); g.connect(out);
-    o.start(when); o.stop(when + dec + 0.05);
+    o.start(when); o.stop(when + dec * k + 0.05);
+  });
+  return out;
+}
+
+/* ------------------------------------------------------------
+   Riffs: exact notes, for songs whose guitar part is a line rather
+   than a chord.  A song's `riffs` maps a name to one bar of
+   space-separated tokens, one per step:
+     "."        nothing new -- whatever is sounding keeps sounding
+     "r"        a rest -- everything stops
+     "G12+B12"  notes struck together: string letter (E A D G B e, low
+                to high) and fret, relative to the capo.  A trailing
+                "x" is a dead (muted) note, "~" lets the note ring on.
+   A section's `riff` names the bar to play under each of its bars.
+   ------------------------------------------------------------ */
+const RIFF_STRINGS = "EADGBe";
+
+function parseRiffBar(text){
+  return text.trim().split(/\s+/).map(tok => {
+    if (tok === ".") return null;
+    if (tok === "r") return "r";
+    return tok.split("+").map(n => {
+      const m = n.match(/^([EADGBe])(\d+)([x~]?)$/);
+      return { str: RIFF_STRINGS.indexOf(m[1]), fret: +m[2],
+               dead: m[3] === "x", ring: m[3] === "~" };
+    });
   });
 }
+
+function damp(v, when){
+  v.out.gain.cancelScheduledValues(when);
+  v.out.gain.setValueAtTime(0.16, when);
+  v.out.gain.setTargetAtTime(0, when, 0.012);
+}
+
+function silenceRiff(){
+  if (ctx) ringing.forEach(v => damp(v, ctx.currentTime));
+  ringing = [];
+}
+
+/* A new note stops what came before it, as lifting a finger would:
+   every note not marked to ring, and anything on the same string.
+   A rest stops everything. */
+function playRiff(idx, step, when){
+  const bar = RIFFS[EVENTS[idx].riff];
+  const tok = bar ? bar[step] : null;
+  if (!tok) return;
+  const notes = tok === "r" ? [] : tok;
+  ringing = ringing.filter(v => {
+    if (when - v.start > 3) return false;                    // long since faded
+    if (tok === "r" || !v.ring || notes.some(n => n.str === v.str)){ damp(v, when); return false; }
+    return true;
+  });
+  notes.forEach((n, i) => {
+    const out = pluck(OPEN_MIDI[n.str] + n.fret + capo, when + i * 0.006,
+                      n.dead ? 0.45 : 0.8, n.dead ? 0.04 : 1);
+    if (out && !n.dead) ringing.push({ str:n.str, ring:n.ring, out, start:when });
+  });
+}
+
+/* A bar written "Cadd9,Bm/D" holds two chords, one per half. */
+const chordAt = (idx, step) => {
+  const ev = EVENTS[idx];
+  return ev.chord2 && step >= SONG.stepsPerBar / 2 ? ev.chord2 : ev.chord;
+};
 
 function click(when, accent){
   if (soundMode === "off" || soundMode === "guitar") return;
@@ -112,16 +180,19 @@ function stepStrings(shape, st){
    Scheduler
    ============================================================ */
 function scheduleStep(idx, step, when){
-  const shape = SONG.shapes[EVENTS[idx].chord];
-  const st = pattern.steps[step];
   if (step % stepsPerBeat() === 0) click(when, step === 0);
-  const spread = st && st.strum ? 0.014 : 0.006;
-  const strs = stepStrings(shape, st);
-  const scale = st && st.strum && strs.length > 1 ? 1 / Math.sqrt(strs.length) : 1;
-  strs.forEach((s, i) => {
-    const m = stringMidi(shape, s);
-    if (m != null) pluck(m, when + i * spread, (st.f === "p" && i === 0 ? 1.0 : 0.7) * scale);
-  });
+  if (pattern.riff) playRiff(idx, step, when);
+  else {
+    const shape = SONG.shapes[chordAt(idx, step)];
+    const st = pattern.steps[step];
+    const spread = st && st.strum ? 0.014 : 0.006;
+    const strs = stepStrings(shape, st);
+    const scale = st && st.strum && strs.length > 1 ? 1 / Math.sqrt(strs.length) : 1;
+    strs.forEach((s, i) => {
+      const m = stringMidi(shape, s);
+      if (m != null) pluck(m, when + i * spread, (st.f === "p" && i === 0 ? 1.0 : 0.7) * scale);
+    });
+  }
   drawQueue.push({ idx, step, when });
 }
 
@@ -183,6 +254,7 @@ function stop(){
   clearInterval(schedTimer);
   schedTimer = null;
   drawQueue.length = 0;
+  silenceRiff();
   $("play").innerHTML = "&#9654; Play";
   $("nowLabel").textContent = "Paused";
   document.querySelectorAll(".dot").forEach(d => d.classList.remove("on","down"));
@@ -322,7 +394,7 @@ function buildTimeline(){
     const kind = /chorus/i.test(s.name) ? " chorus" : /bridge/i.test(s.name) ? " bridge" : "";
     const cells = s.chords.map((c, i) => {
       const gi = s.start + i;
-      const chip = '<button class="chip" data-i="' + gi + '">' + c + '</button>';
+      const chip = '<button class="chip" data-i="' + gi + '">' + c.split(",").join(" &middot; ") + '</button>';
       return editingCues
         ? '<div class="cue-cell">' + chip + '<input data-cue="' + gi + '" value="' +
           esc(cues[gi] || "") + '" placeholder="' + (gi+1) + '…" aria-label="Cue for bar ' + (gi+1) + '"></div>'
@@ -380,14 +452,31 @@ function buildPatGrid(){
   $("patDesc").innerHTML = pattern.desc;
 }
 
-/* The thumb's string depends on the chord, so the grid is re-marked
-   on every chord change rather than once per pattern. */
-function markPattern(chordName){
-  const shape = SONG.shapes[chordName];
+/* What the grid shows depends on where we are: a riff is drawn bar by
+   bar, and a pattern's thumb string depends on the chord. */
+const markKey = (idx, step) =>
+  pattern.riff ? "riff:" + EVENTS[idx].riff : "chord:" + chordAt(idx, step);
+
+/* The grid is re-marked whenever markKey() changes rather than once per
+   pattern.  A riff shows the fret of every note it strikes. */
+function markPattern(idx, step){
   document.querySelectorAll(".pg-cell[data-step]").forEach(c => {
     c.className = "pg-cell";
     c.textContent = "";
   });
+  if (pattern.riff){
+    (RIFFS[EVENTS[idx].riff] || []).forEach((tok, si) => {
+      if (!tok || tok === "r") return;
+      tok.forEach(n => {
+        const cell = document.querySelector('.pg-cell[data-step="' + si + '"][data-str="' + n.str + '"]');
+        if (!cell) return;
+        cell.classList.add("hit");
+        cell.textContent = n.dead ? "x" : n.fret;
+      });
+    });
+    return;
+  }
+  const shape = SONG.shapes[chordAt(idx, step)];
   pattern.steps.forEach((st, si) => {
     if (!st) return;
     const strs = stepStrings(shape, st);
@@ -410,30 +499,41 @@ function markPattern(chordName){
 /* ============================================================
    Display
    ============================================================ */
-let lastDrawn = -1, lastStep = -1, lastChordShown = null;
+let lastDrawn = -1, lastStep = -1, lastChordShown = null, lastHalf = -1, lastMarked = null;
+
+/* The next two chords after the one sounding, counting each half of a
+   split bar as its own chord. */
+function upcoming(idx, inSecondHalf){
+  const out = [];
+  if (!inSecondHalf && EVENTS[idx].chord2) out.push(EVENTS[idx].chord2);
+  for (let k = 1; out.length < 2 && k <= TOTAL; k++){
+    const e = EVENTS[(idx + k) % TOTAL];
+    out.push(e.chord);
+    if (e.chord2) out.push(e.chord2);
+  }
+  return out;
+}
 
 function paint(idx, step){
   const ev = EVENTS[idx];
+  const second = !!ev.chord2 && step >= SONG.stepsPerBar / 2;
+  const chord = second ? ev.chord2 : ev.chord;
+  const half = idx * 2 + (second ? 1 : 0);
+
+  if (half !== lastHalf){
+    const up = upcoming(idx, second);
+    $("nowChord").textContent = chord;
+    $("nowFrets").textContent = fretStr(chord);
+    $("nextChord").textContent = up[0];
+    $("thenChord").textContent = up[1];
+    lastHalf = half;
+  }
 
   if (idx !== lastDrawn){
-    $("nowChord").textContent = ev.chord;
-    $("nowFrets").textContent = fretStr(ev.chord);
-    $("nextChord").textContent = EVENTS[(idx+1) % TOTAL].chord;
-    $("thenChord").textContent = EVENTS[(idx+2) % TOTAL].chord;
-
     const sec = SONG.sections[ev.sectionIdx], pos = idx - sec.start;
     $("barNum").textContent = pos + 1;
     $("nowSec").textContent = sec.name + " · bar " + (pos+1) + " of " + sec.chords.length;
     $("nowCue").textContent = cueFor(idx);
-
-    if (ev.chord !== lastChordShown){
-      $("nowDiagram").innerHTML = diagram(ev.chord, 152);
-      lastChordShown = ev.chord;
-      document.querySelectorAll(".cc").forEach(c =>
-        c.classList.toggle("cur", c.dataset.chord === ev.chord));
-      markPattern(ev.chord);
-      lastStep = -1;
-    }
 
     document.querySelectorAll(".chip").forEach(c => {
       const i = +c.dataset.i;
@@ -448,6 +548,20 @@ function paint(idx, step){
         box.scrollTo({ top: top - box.clientHeight/2, behavior:"smooth" });
     }
     lastDrawn = idx;
+  }
+
+  if (chord !== lastChordShown){
+    $("nowDiagram").innerHTML = diagram(chord, 152);
+    lastChordShown = chord;
+    document.querySelectorAll(".cc").forEach(c =>
+      c.classList.toggle("cur", c.dataset.chord === chord));
+  }
+
+  const mk = markKey(idx, step);
+  if (mk !== lastMarked){
+    markPattern(idx, step);
+    lastMarked = mk;
+    lastStep = -1;
   }
 
   if (step !== lastStep){
@@ -497,11 +611,19 @@ function loadSong(id){
   SONG = SONGS[id];
 
   /* sections -> flat bar list, and the sung-line bar map */
+  RIFFS = {};
+  Object.keys(SONG.riffs || {}).forEach(k => { RIFFS[k] = parseRiffBar(SONG.riffs[k]); });
+  ringing = [];
+
   EVENTS = [];
   SONG.sections.forEach((s, si) => {
     if (typeof s.chords === "string") s.chords = s.chords.trim().split(/\s+/);
+    const riff = s.riff ? s.riff.trim().split(/\s+/) : [];
     s.start = EVENTS.length;
-    s.chords.forEach(c => EVENTS.push({ chord:c, sectionIdx:si }));
+    s.chords.forEach((c, i) => {
+      const two = c.split(",");
+      EVENTS.push({ chord:two[0], chord2:two[1] || null, sectionIdx:si, riff:riff[i] || null });
+    });
     s.end = EVENTS.length;
   });
   TOTAL = EVENTS.length;
@@ -511,7 +633,7 @@ function loadSong(id){
   bpm = SONG.bpm;
   capo = SONG.capo || 0;
   cursor = 0; stepIndex = 0; loopSection = null;
-  lastDrawn = -1; lastStep = -1; lastChordShown = null;
+  lastDrawn = -1; lastStep = -1; lastChordShown = null; lastHalf = -1; lastMarked = null;
   pattern = SONG.patterns[0];
   editingCues = false;
 
@@ -544,7 +666,6 @@ function loadSong(id){
     '<div class="panel note ' + (n.cls || "") + '"><h3>' + n.h + "</h3>" + n.body + "</div>").join("");
 
   buildLib(); buildPatGrid(); buildTimeline(); bindTimeline();
-  markPattern(EVENTS[0].chord);
   paint(0, 0);
   loadLyricFile(id);      // overrides the stored cues if the file exists
 }
@@ -554,6 +675,7 @@ function loadSong(id){
    ============================================================ */
 function reseek(){
   stepIndex = 0; lastDrawn = -1;
+  silenceRiff();
   if (playing){ drawQueue.length = 0; nextStepTime = ctx.currentTime + 0.05; }
   else paint(cursor, 0);
 }
@@ -657,9 +779,10 @@ $("capo").onchange = e => { capo = +e.target.value; };
 $("sound").onchange = e => { soundMode = e.target.value; };
 $("pattern").onchange = e => {
   pattern = SONG.patterns[+e.target.value];
+  silenceRiff();
   buildPatGrid();
-  markPattern(EVENTS[cursor].chord);
-  lastStep = -1;
+  lastMarked = null;
+  paint(cursor, lastStep < 0 ? 0 : lastStep);
 };
 
 document.addEventListener("keydown", e => {

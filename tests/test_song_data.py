@@ -149,13 +149,14 @@ class SectionTests(unittest.TestCase):
     def test_every_chord_used_has_a_shape(self):
         for song_id, song in SONGS.items():
             for section in song["sections"]:
-                for chord in jsdata.section_chords(section):
+                for chord in (c for bar in jsdata.section_chords(section)
+                              for c in jsdata.bar_chords(bar)):
                     with self.subTest(song=song_id, section=section["name"], chord=chord):
                         self.assertIn(chord, song["shapes"])
 
     def test_every_shape_is_used_by_some_section(self):
         for song_id, song in SONGS.items():
-            used = set(jsdata.bars(song))
+            used = set(jsdata.chord_names(song))
             for name in song["shapes"]:
                 with self.subTest(song=song_id, chord=name):
                     self.assertIn(name, used, "shape is defined but never played")
@@ -204,10 +205,15 @@ class PatternTests(unittest.TestCase):
     """Picking and strumming patterns fill exactly one bar."""
 
     def test_each_pattern_has_steps_per_bar_steps(self):
+        # A riff pattern has no steps of its own: it plays the song's riffs.
         for song_id, song in SONGS.items():
             for pattern in song["patterns"]:
                 with self.subTest(song=song_id, pattern=pattern["name"]):
-                    self.assertEqual(len(pattern["steps"]), song["stepsPerBar"])
+                    if pattern.get("riff"):
+                        self.assertNotIn("steps", pattern)
+                        self.assertTrue(song.get("riffs"), "riff pattern but no riffs")
+                    else:
+                        self.assertEqual(len(pattern["steps"]), song["stepsPerBar"])
 
     def test_patterns_are_named_and_described(self):
         for song_id, song in SONGS.items():
@@ -224,7 +230,7 @@ class PatternTests(unittest.TestCase):
         allowed = {"s", "b", "f", "strum", "pinch"}
         for song_id, song in SONGS.items():
             for pattern in song["patterns"]:
-                for i, step in enumerate(pattern["steps"]):
+                for i, step in enumerate(pattern.get("steps", [])):
                     if step is None:
                         continue
                     with self.subTest(song=song_id, pattern=pattern["name"], step=i):
@@ -243,7 +249,7 @@ class PatternTests(unittest.TestCase):
         for song_id, song in SONGS.items():
             grid = {index for index, _ in song["gridStrings"]}
             for pattern in song["patterns"]:
-                for i, step in enumerate(pattern["steps"]):
+                for i, step in enumerate(pattern.get("steps", [])):
                     if not step:
                         continue
                     for key in ("s", "pinch"):
@@ -257,7 +263,7 @@ class PatternTests(unittest.TestCase):
         # no alt, which would silently turn an alternating bass into a drone.
         for song_id, song in SONGS.items():
             uses_alt = any(step and step.get("b") == 2
-                           for pattern in song["patterns"] for step in pattern["steps"])
+                           for pattern in song["patterns"] for step in pattern.get("steps", []))
             if not uses_alt:
                 continue
             for name, shape in song["shapes"].items():
